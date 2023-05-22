@@ -3,6 +3,15 @@
 
 #include <stdint.h>
 
+enum class microstep_resolution : uint8_t {
+    FULL_STEP, /* 200 steps per revolution */
+    HALF_STEP,
+    ONE_FOUR_STEP, /* 1/4 step */
+    ONE_HEIGHT_STEP, /* 1/8 step */
+    ONE_SIXTEEN_STEP, /* 1/16 step */
+    ONE_THIRTY_TWO_STEP /* 1/32 step */
+};
+
 class MotorDriver8834 {
 
 public:
@@ -17,7 +26,7 @@ public:
      *
      * @param other MotorDriver8834 object.
      */
-    MotorDriver8834 ( const MotorDriver8834& other );
+    MotorDriver8834(const MotorDriver8834 &other);
 
     /**
      * Destructor
@@ -34,6 +43,29 @@ public:
      * @param M1_Pin: M1 pin (not mandatory).
      */
     void initPins(uint8_t stepPin, uint8_t dirPin, uint8_t sleepPin = 255, uint8_t M0_Pin = 255, uint8_t M1_Pin = 255);
+
+    /**
+     * Go forward.
+     * @param nbStep: steps number.
+     * @param speed: delay between steps (in ms).
+     * @return -1 in case of error, otherwise 0.
+     */
+    uint8_t goForward(int nbStep, int speed);
+
+    /**
+     * Go backward.
+     * @param nbStep: steps number.
+     * @param speed: delay between steps (in ms).
+     * @return -1 in case of error, otherwise 0.
+     */
+    uint8_t goBackward(int nbStep, int speed);
+
+    /**
+     * Define the microstep resolution.
+     * @param res: resolution as enum.
+     * @return -1 in case of error, otherwise 0.
+     */
+    uint8_t defineMicrostepResolution(microstep_resolution res);
 
 private:
     uint8_t stepPin_;
