@@ -1,3 +1,8 @@
+/**
+ * Jocelyn GIROD - 21/05/2023
+ * DRV8834 motor driver class.
+ */
+
 #ifndef _MOTOR_DRIVER8834_H_
 #define _MOTOR_DRIVER8834_H_
 

@@ -40,7 +40,7 @@ MotorDriver8834::~MotorDriver8834() {}
  */
 void MotorDriver8834::initPins(uint8_t stepPin, uint8_t dirPin, uint8_t sleepPin, uint8_t M0_Pin, uint8_t M1_Pin) {
 
-    stepPin_ = sleepPin;
+    stepPin_ = stepPin;
     dirPin_ = dirPin;
     pinMode(stepPin_, OUTPUT);
     pinMode(dirPin_, OUTPUT);
