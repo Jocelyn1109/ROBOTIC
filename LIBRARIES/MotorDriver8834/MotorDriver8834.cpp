@@ -157,3 +157,29 @@ uint8_t MotorDriver8834::defineMicrostepResolution(microstep_resolution res) {
             return -1;
     }
 }
+
+/**
+ * Enable the driver (put the PIN SLEEP to HIGH).
+ * @return -1 if pin sleep is not initialized.
+ */
+uint8_t MotorDriver8834::enableDriver() {
+
+    if (sleepPin_ == 255) {
+        return -1;
+    }
+    digitalWrite(sleepPin_, HIGH);
+
+}
+
+/**
+ * Enable the driver (put the PIN SLEEP to HIGH).
+ * @return -1 if pin sleep is not initialized.
+ */
+uint8_t MotorDriver8834::disbableDriver() {
+
+    if (sleepPin_ == 255) {
+        return -1;
+    }
+    digitalWrite(sleepPin_, LOW);
+
+}

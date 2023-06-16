@@ -72,6 +72,18 @@ public:
      */
     uint8_t defineMicrostepResolution(microstep_resolution res);
 
+    /**
+     * Enable the driver (put the PIN SLEEP to HIGH).
+     * @return -1 if pin sleep is not initialized.
+     */
+    uint8_t enableDriver();
+
+    /**
+     * Disable the driver (put the PIN SLEEP to LOW).
+     * @return -1 if pin sleep is not initialized.
+     */
+    uint8_t disbableDriver();
+
 private:
     uint8_t stepPin_;
     uint8_t dirPin_;
