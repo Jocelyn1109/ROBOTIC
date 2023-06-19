@@ -53,7 +53,7 @@ public:
      * Go forward.
      * @param nbStep: steps number.
      * @param speed: delay between steps (in ms).
-     * @return -1 in case of error, otherwise 0.
+     * @return 1 in case of error, otherwise 0.
      */
     uint8_t goForward(int nbStep, int speed);
 
@@ -61,7 +61,7 @@ public:
      * Go backward.
      * @param nbStep: steps number.
      * @param speed: delay between steps (in ms).
-     * @return -1 in case of error, otherwise 0.
+     * @return 1 in case of error, otherwise 0.
      */
     uint8_t goBackward(int nbStep, int speed);
 
@@ -74,15 +74,34 @@ public:
 
     /**
      * Enable the driver (put the PIN SLEEP to HIGH).
-     * @return -1 if pin sleep is not initialized.
+     * @return 1 if sleep pin is not initialized, otherwise 0.
      */
     uint8_t enableDriver();
 
     /**
      * Disable the driver (put the PIN SLEEP to LOW).
-     * @return -1 if pin sleep is not initialized.
+     * @return 1 if sleep pin is not initialized, otherwise 0.
      */
     uint8_t disbableDriver();
+
+    /**
+     * Set the forward direction.
+     * @return 1 if dir pin is not initialized, otherwise 0.
+     */
+    uint8_t setForwadDirection();
+
+    /**
+     * Set the backward direction.
+     * @return 1 if dir pin is not initialized, otherwise 0.
+     */
+    uint8_t setBackwardDirection();
+
+    /**
+     * One step.
+     * @param speed: step speed (in ms).
+     * @return 1 if step pin is not initialized, otherwise 0.
+     */
+    uint8_t oneStep(int speed);
 
 private:
     uint8_t stepPin_;

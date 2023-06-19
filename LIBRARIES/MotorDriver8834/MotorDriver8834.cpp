@@ -65,12 +65,12 @@ void MotorDriver8834::initPins(uint8_t stepPin, uint8_t dirPin, uint8_t sleepPin
  * Go forward.
  * @param nbStep: steps number.
  * @param speed: delay between steps (in ms).
- * @return -1 in case of error, otherwise 0.
+ * @return 1 in case of error, otherwise 0.
  */
 uint8_t MotorDriver8834::goForward(int nbStep, int speed) {
 
     if (stepPin_ == 255 || dirPin_ == 255) {
-        return -1;
+        return 1;
     }
 
     digitalWrite(dirPin_, HIGH);  // forward
@@ -90,12 +90,12 @@ uint8_t MotorDriver8834::goForward(int nbStep, int speed) {
  * Go backward.
  * @param nbStep: steps number.
  * @param speed: delay between steps (in ms).
- * @return -1 in case of error, otherwise 0.
+ * @return 1 in case of error, otherwise 0.
  */
 uint8_t MotorDriver8834::goBackward(int nbStep, int speed) {
 
     if (stepPin_ == 255 || dirPin_ == 255) {
-        return -1;
+        return 1;
     }
 
     digitalWrite(dirPin_, LOW);  // backward
@@ -114,66 +114,76 @@ uint8_t MotorDriver8834::goBackward(int nbStep, int speed) {
 /**
  * Define the microstep resolution.
  * @param res: resolution as enum.
- * @return -1 in case of error, otherwise 0.
+ * @return 1 in case of error, otherwise 0.
  */
 uint8_t MotorDriver8834::defineMicrostepResolution(microstep_resolution res) {
 
     if (M0_Pin_ == 255 || M1_Pin_ == 255) {
-        return -1;
+        return 1;
     }
 
     switch (res) {
         case microstep_resolution::FULL_STEP:
+            pinMode(M0_Pin_, OUTPUT);
             digitalWrite(M0_Pin_, LOW);
             digitalWrite(M1_Pin_, LOW);
             break;
 
         case microstep_resolution::HALF_STEP:
+            pinMode(M0_Pin_, OUTPUT);
             digitalWrite(M0_Pin_, HIGH);
             digitalWrite(M1_Pin_, LOW);
             break;
 
         case microstep_resolution::ONE_FOUR_STEP:
-            digitalWrite(M0_Pin_, INPUT_PULLUP);
+            pinMode(M0_Pin_, INPUT_PULLUP);
+            digitalWrite(M0_Pin_, LOW);
             digitalWrite(M1_Pin_, LOW);
             break;
 
         case microstep_resolution::ONE_HEIGHT_STEP:
+            pinMode(M0_Pin_, OUTPUT);
             digitalWrite(M0_Pin_, LOW);
             digitalWrite(M1_Pin_, HIGH);
             break;
 
         case microstep_resolution::ONE_SIXTEEN_STEP:
+            pinMode(M0_Pin_, OUTPUT);
             digitalWrite(M0_Pin_, HIGH);
             digitalWrite(M1_Pin_, HIGH);
             break;
 
         case microstep_resolution::ONE_THIRTY_TWO_STEP:
-            digitalWrite(M0_Pin_, INPUT_PULLUP);
+            pinMode(M0_Pin_, INPUT_PULLUP);
+            digitalWrite(M0_Pin_, LOW);
             digitalWrite(M1_Pin_, HIGH);
             break;
 
         default:
-            return -1;
+            return 1;
     }
+
+    return 0;
 }
 
 /**
  * Enable the driver (put the PIN SLEEP to HIGH).
- * @return -1 if pin sleep is not initialized.
+ * @return 1 if sleep pin is not initialized, otherwise 0.
  */
 uint8_t MotorDriver8834::enableDriver() {
 
     if (sleepPin_ == 255) {
-        return -1;
+        return 1;
     }
     digitalWrite(sleepPin_, HIGH);
+
+    return 0;
 
 }
 
 /**
  * Enable the driver (put the PIN SLEEP to HIGH).
- * @return -1 if pin sleep is not initialized.
+ * @return 1 if sleep pin is not initialized, otherwise 0.
  */
 uint8_t MotorDriver8834::disbableDriver() {
 
@@ -182,4 +192,55 @@ uint8_t MotorDriver8834::disbableDriver() {
     }
     digitalWrite(sleepPin_, LOW);
 
+    return 0;
+
+}
+
+/**
+ * Set the forward direction.
+ * @return 1 if dir pin is not initialized, otherwise 0.
+ */
+uint8_t MotorDriver8834::setForwadDirection() {
+
+    if (dirPin_ == 255) {
+        return 1;
+    }
+
+    digitalWrite(dirPin_, HIGH);  // forward
+
+    return 0;
+}
+
+/**
+ * Set the backward direction.
+ * @return 1 if dir pin is not initialized, otherwise 0.
+ */
+uint8_t MotorDriver8834::setBackwardDirection() {
+
+    if (dirPin_ == 255) {
+        return 1;
+    }
+
+    digitalWrite(dirPin_, LOW);  // backward
+
+    return 0;
+}
+
+/**
+ * One step.
+ * @param speed: step speed (in ms).
+ * @return 1 if step pin is not initialized, otherwise 0.
+ */
+uint8_t MotorDriver8834::oneStep(int speed) {
+
+    if (stepPin_ == 255) {
+        return 1;
+    }
+
+    digitalWrite(stepPin_, HIGH);
+    delay(speed);
+    digitalWrite(stepPin_, LOW);
+    delay(speed);
+
+    return 0;
 }
