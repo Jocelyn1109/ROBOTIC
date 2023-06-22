@@ -10,7 +10,7 @@ project(${PROJECT_NAME})
 # Define additional source and header files or default arduino sketch files
 # These files are now added to the sketch file, if the sketch is defined.
 set(${PROJECT_NAME}_SRCS Logger_Test.cpp Logger.cpp enum/LoggerLevel.cpp)
-set(${PROJECT_NAME}_HDRS Logger.h enum/EnumLevel.hpp enum/LoggerLevel.cpp)
+set(${PROJECT_NAME}_HDRS Logger.h enum/EnumLevel.hpp enum/LoggerLevel.hpp)
 
 ### Additional static libraries to include in the target.
 # set(${PROJECT_NAME}_LIBS)
@@ -21,10 +21,14 @@ set(${PROJECT_NAME}_HDRS Logger.h enum/EnumLevel.hpp enum/LoggerLevel.cpp)
 ### Add project directories into the build
 # add_subdirectory()
 
+# Add include directories
+INCLUDE_DIRECTORIES(../../../../.arduino15/libraries/SD/src/)
+
 ### Additional settings to add non-standard or your own Arduino libraries.
 # For this example (libs will contain additional arduino libraries)
 # An Arduino library my_lib will contain files in libs/my_lib/: my_lib.h, my_lib.cpp + any other cpp files
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/)
+link_directories(/home/wells/.arduino15/libraries)
 
 # This is no longer need but left in for those occasions where automatics do not work out. 
 # Current Arduino.cmake will recurse into any libraries which contain source files in src/ subdirectory. 
