@@ -28,7 +28,6 @@ INCLUDE_DIRECTORIES(../../../../.arduino15/libraries/SD/src/)
 # For this example (libs will contain additional arduino libraries)
 # An Arduino library my_lib will contain files in libs/my_lib/: my_lib.h, my_lib.cpp + any other cpp files
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/)
-link_directories(/home/wells/.arduino15/libraries)
 
 # This is no longer need but left in for those occasions where automatics do not work out. 
 # Current Arduino.cmake will recurse into any libraries which contain source files in src/ subdirectory. 
