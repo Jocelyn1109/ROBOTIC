@@ -1,2 +1,0 @@
-# Arduino Logger library
-
