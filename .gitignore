@@ -30,3 +30,17 @@
 *.exe
 *.out
 *.app
+
+LIBRARIES/Logger/CMakeLists.txt
+
+LIBRARIES/Logger/cmake/
+
+LIBRARIES/.idea/
+
+LIBRARIES/MotorDriver8834/.idea/
+
+LIBRARIES/MotorDriver8834/cmake/
+
+LIBRARIES/MotorDriver8834/cmake-build-debug/
+
+LIBRARIES/MotorDriver8834/CMakeLists.txt
