@@ -26,7 +26,7 @@ public:
      * Default constructor
      * @param logger (let NULL for no log).
      */
-    MotorDriver8834(Logger *logger);
+    explicit MotorDriver8834(Logger *logger);
 
     /**
      * Copy constructor
@@ -72,7 +72,7 @@ public:
      * @param res: resolution as enum.
      * @return -1 in case of error, otherwise 0.
      */
-    uint8_t defineMicrostepResolution(microstep_resolution res);
+    uint8_t defineMicrostepResolution(microstep_resolution res)const;
 
     /**
      * Enable the driver (put the PIN SLEEP to HIGH).
@@ -103,7 +103,7 @@ public:
      * @param speed: step speed (in ms).
      * @return 1 if step pin is not initialized, otherwise 0.
      */
-    uint8_t oneStep(int speed);
+    uint8_t oneStep(int speed) const;
 
 private:
     uint8_t stepPin_;

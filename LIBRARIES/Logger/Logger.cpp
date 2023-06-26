@@ -4,6 +4,7 @@
  */
 
 #include <Arduino.h>
+
 #include "Logger.h"
 #include "enum/LoggerLevel.hpp"
 
@@ -27,7 +28,7 @@ Logger::Logger(const Logger &other) {}
 /**
  * Destructor
  */
-Logger::~Logger() {}
+Logger::~Logger() = default;
 
 
 /**

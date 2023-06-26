@@ -18,7 +18,7 @@ public:
      * Default constructor
      * @param fileName the name of the log file (by default log.txt).
      */
-    Logger(String fileName);
+    explicit Logger(String fileName);
 
     /**
     * Copy constructor

@@ -36,7 +36,7 @@ MotorDriver8834::MotorDriver8834(const MotorDriver8834 &other) {}
 /**
  * Destructor
  */
-MotorDriver8834::~MotorDriver8834() {}
+MotorDriver8834::~MotorDriver8834() = default;
 
 /**
  * Initialize driver's pins.
@@ -82,7 +82,7 @@ uint8_t MotorDriver8834::goForward(int nbStep, int speed) {
         return 1;
     }
 
-    if (logger_ != NULL) {
+    if (logger_ != nullptr) {
         uint8_t resW = logger_->writeInfoMessage(String((const __FlashStringHelper *) GO_FORWARD_LOG_MESSAGE));
         if (resW == 1) {
             return 1;
@@ -114,7 +114,7 @@ uint8_t MotorDriver8834::goBackward(int nbStep, int speed) {
         return 1;
     }
 
-    if (logger_ != NULL) {
+    if (logger_ != nullptr) {
         uint8_t resW = logger_->writeInfoMessage(String((const __FlashStringHelper *) GO_BACKWARD_LOG_MESSAGE));
         if (resW == 1) {
             return 1;
@@ -139,7 +139,7 @@ uint8_t MotorDriver8834::goBackward(int nbStep, int speed) {
  * @param res: resolution as enum.
  * @return 1 in case of error, otherwise 0.
  */
-uint8_t MotorDriver8834::defineMicrostepResolution(microstep_resolution res) {
+uint8_t MotorDriver8834::defineMicrostepResolution(microstep_resolution res) const {
 
     if (M0_Pin_ == 255 || M1_Pin_ == 255) {
         return 1;
@@ -199,7 +199,7 @@ uint8_t MotorDriver8834::enableDriver() {
         return 1;
     }
 
-    if (logger_ != NULL) {
+    if (logger_ != nullptr) {
         uint8_t resW = logger_->writeInfoMessage(String((const __FlashStringHelper *) ENABLE_DRIVER_LOG_MESSAGE));
         if (resW == 1) {
             return 1;
@@ -222,7 +222,7 @@ uint8_t MotorDriver8834::disbableDriver() {
         return -1;
     }
 
-    if (logger_ != NULL) {
+    if (logger_ != nullptr) {
         uint8_t resW = logger_->writeInfoMessage(String((const __FlashStringHelper *) DISABLE_DRIVER_LOG_MESSAGE));
         if (resW == 1) {
             return 1;
@@ -245,7 +245,7 @@ uint8_t MotorDriver8834::setForwadDirection() {
         return 1;
     }
 
-    if (logger_ != NULL) {
+    if (logger_ != nullptr) {
         uint8_t resW = logger_->writeInfoMessage(String((const __FlashStringHelper *) SET_FORWARD_DIR_LOG_MESSAGE));
         if (resW == 1) {
             return 1;
@@ -267,7 +267,7 @@ uint8_t MotorDriver8834::setBackwardDirection() {
         return 1;
     }
 
-    if (logger_ != NULL) {
+    if (logger_ != nullptr) {
         uint8_t resW = logger_->writeInfoMessage(String((const __FlashStringHelper *) SET_BACKWARD_DIR_LOG_MESSAGE));
         if (resW == 1) {
             return 1;
@@ -285,7 +285,7 @@ uint8_t MotorDriver8834::setBackwardDirection() {
  * @param speed: step speed (in ms).
  * @return 1 if step pin is not initialized, otherwise 0.
  */
-uint8_t MotorDriver8834::oneStep(int speed) {
+uint8_t MotorDriver8834::oneStep(int speed) const {
 
     if (stepPin_ == 255) {
         return 1;

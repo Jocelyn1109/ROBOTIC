@@ -7,7 +7,8 @@
   - enableDriver,
   - defineMicrostepResolution,
   - goForward,
-  - goBackward.
+  - goBackward,
+  - Logger.
 */
 
 #include "MotorDriver8834.h"
