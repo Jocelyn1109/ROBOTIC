@@ -14,7 +14,7 @@ const char PROGMEM SET_FORWARD_DIR_LOG_MESSAGE[] = "SET FORWARD DIRECTION";
 const char PROGMEM SET_BACKWARD_DIR_LOG_MESSAGE[] = "SET BACKWARD DIRECTION";
 
 /**
- * Default constructor
+ * Default constructor.
  * @param logger (let NULL for no log).
  */
 MotorDriver8834::MotorDriver8834(Logger *logger) {
@@ -27,7 +27,7 @@ MotorDriver8834::MotorDriver8834(Logger *logger) {
 }
 
 /**
- * Copy constructor
+ * Copy constructor.
  *
  * @param other MotorDriver8834 object.
  */

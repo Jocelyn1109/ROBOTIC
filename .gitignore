@@ -31,16 +31,20 @@
 *.out
 *.app
 
+# Logger
+LIBRARIES/Logger/.idea/
+LIBRARIES/Logger/cmake/
+LIBRARIES/Logger/cmake-build-debug/
 LIBRARIES/Logger/CMakeLists.txt
 
-LIBRARIES/Logger/cmake/
-
-LIBRARIES/.idea/
-
+# MotorDriver8834
 LIBRARIES/MotorDriver8834/.idea/
-
 LIBRARIES/MotorDriver8834/cmake/
-
 LIBRARIES/MotorDriver8834/cmake-build-debug/
-
 LIBRARIES/MotorDriver8834/CMakeLists.txt
+
+# MotorDriverL9910
+LIBRARIES/MotorDriverL9910/.idea/
+LIBRARIES/MotorDriverL9910/cmake/
+LIBRARIES/MotorDriverL9910/cmake-build-debug/
+LIBRARIES/MotorDriverL9910/CMakeLists.txt

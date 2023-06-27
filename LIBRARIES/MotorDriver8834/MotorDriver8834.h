@@ -23,13 +23,13 @@ class MotorDriver8834 {
 public:
 
     /**
-     * Default constructor
+     * Default constructor.
      * @param logger (let NULL for no log).
      */
     explicit MotorDriver8834(Logger *logger);
 
     /**
-     * Copy constructor
+     * Copy constructor.
      *
      * @param other MotorDriver8834 object.
      */
