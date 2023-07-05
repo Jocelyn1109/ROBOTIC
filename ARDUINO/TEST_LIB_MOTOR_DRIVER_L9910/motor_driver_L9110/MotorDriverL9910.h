@@ -9,12 +9,12 @@ public:
 
     /**
      * Default constructor.
-     * @param pinAIA: pin AIA.
-     * @param pinAIB: pin AIB.
-     * @param pinBIA: pin BIA.
-     * @param pinBIB: pin BIB.
+     * @param pinA1A: pin A1A.
+     * @param pinA1B: pin A1B.
+     * @param pinB1A: pin B1A.
+     * @param pinB1B: pin B1B.
      */
-    explicit MotorDriverL9910(uint8_t pinAIA, uint8_t pinAIB, uint8_t pinBIA, uint8_t pinBIB);
+    explicit MotorDriverL9910(uint8_t pinA1A, uint8_t pinA1B, uint8_t pinB1A, uint8_t pinB1B);
 
     /**
      * Copy constructor.
@@ -100,10 +100,10 @@ public:
 
 private:
 
-    uint8_t pinAIA_;
-    uint8_t pinAIB_;
-    uint8_t pinBIA_;
-    uint8_t pinBIB_;
+    uint8_t pinA1A_;
+    uint8_t pinA1B_;
+    uint8_t pinB1A_;
+    uint8_t pinB1B_;
     bool stopAccelerateDecelerate_;
 
     /**

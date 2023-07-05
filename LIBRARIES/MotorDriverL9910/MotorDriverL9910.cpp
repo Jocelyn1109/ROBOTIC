@@ -8,16 +8,16 @@
 
 /**
  * Default constructor.
- * @param pinAIA: pin AIA.
- * @param pinAIB: pin AIB.
- * @param pinBIA: pin BIA.
- * @param pinBIB: pin BIB.
+ * @param pinA1A: pin A1A.
+ * @param pinA1B: pin A1B.
+ * @param pinB1A: pin B1A.
+ * @param pinB1B: pin B1B.
  */
-MotorDriverL9910::MotorDriverL9910(uint8_t pinAIA, uint8_t pinAIB, uint8_t pinBIA, uint8_t pinBIB) {
-    pinAIA_ = pinAIA;
-    pinAIB_ = pinAIB;
-    pinBIA_ = pinBIA;
-    pinBIB_ = pinBIB;
+MotorDriverL9910::MotorDriverL9910(uint8_t pinA1A, uint8_t pinA1B, uint8_t pinB1A, uint8_t pinB1B) {
+    pinA1A_ = pinA1A;
+    pinA1B_ = pinA1B;
+    pinB1A_ = pinB1A;
+    pinB1B_ = pinB1B;
     initPin();
 }
 
@@ -37,20 +37,20 @@ MotorDriverL9910::~MotorDriverL9910() = default;
  * Initialize pins.
  */
 void MotorDriverL9910::initPin() {
-    pinMode(pinAIA_, OUTPUT);
-    pinMode(pinAIB_, OUTPUT);
-    pinMode(pinBIA_, OUTPUT);
-    pinMode(pinBIB_, OUTPUT);
+    pinMode(pinA1A_, OUTPUT);
+    pinMode(pinA1B_, OUTPUT);
+    pinMode(pinB1A_, OUTPUT);
+    pinMode(pinB1B_, OUTPUT);
 }
 
 /**
  * Stop the motor.
  */
 void MotorDriverL9910::stopMotor() const {
-    digitalWrite(pinAIA_, HIGH);
-    digitalWrite(pinAIB_, HIGH);
-    digitalWrite(pinBIA_, HIGH);
-    digitalWrite(pinBIB_, HIGH);
+    digitalWrite(pinA1A_, HIGH);
+    digitalWrite(pinA1B_, HIGH);
+    digitalWrite(pinB1A_, HIGH);
+    digitalWrite(pinB1B_, HIGH);
 }
 
 /**
@@ -58,10 +58,13 @@ void MotorDriverL9910::stopMotor() const {
  * @param speed: speed between 0 and 255 (0 <= speed <= 255).
  */
 void MotorDriverL9910::goBackward(uint8_t speed) const {
-    analogWrite(pinAIA_, 0);
-    analogWrite(pinBIA_, 0);
-    analogWrite(pinAIB_, speed);
-    analogWrite(pinBIB_, speed);
+    digitalWrite(pinA1A_, 0);
+    digitalWrite(pinB1B_, 0);
+
+    digitalWrite(pinA1A_, 0);
+    analogWrite(pinA1B_, speed);
+    digitalWrite(pinB1A_, 0);
+    analogWrite(pinB1B_, speed);
 }
 
 /**
@@ -69,10 +72,13 @@ void MotorDriverL9910::goBackward(uint8_t speed) const {
  * @param speed: speed between 0 and 255 (0 <= speed <= 255).
  */
 void MotorDriverL9910::goForward(int speed) const {
-    analogWrite(pinAIB_, 0);
-    analogWrite(pinBIB_, 0);
-    analogWrite(pinAIA_, speed);
-    analogWrite(pinBIA_, speed);
+    digitalWrite(pinA1A_, 0);
+    digitalWrite(pinB1B_, 0);
+
+    analogWrite(pinA1A_, speed);
+    digitalWrite(pinA1B_, 0);
+    analogWrite(pinB1A_, speed);
+    digitalWrite(pinB1B_, 0);
 }
 
 /**
@@ -88,8 +94,8 @@ uint8_t MotorDriverL9910::accelerateForward(uint8_t fromSpeed, uint8_t toSpeed, 
         return 1;
     }
 
-    analogWrite(pinAIB_, 0);
-    analogWrite(pinBIB_, 0);
+    digitalWrite(pinA1B_, 0);
+    digitalWrite(pinB1B_, 0);
     for (int i = fromSpeed; i <= toSpeed; i++) {
 
         // avoid the stop during acceleration
@@ -99,8 +105,8 @@ uint8_t MotorDriverL9910::accelerateForward(uint8_t fromSpeed, uint8_t toSpeed, 
             return 0;
         }
 
-        analogWrite(pinAIA_, i);
-        analogWrite(pinBIA_, i);
+        analogWrite(pinA1A_, i);
+        analogWrite(pinB1A_, i);
         delay(accelerateSpeed);
     }
 
@@ -121,8 +127,8 @@ uint8_t MotorDriverL9910::accelerateBackward(uint8_t fromSpeed, uint8_t toSpeed,
         return 1;
     }
 
-    analogWrite(pinAIA_, 0);
-    analogWrite(pinBIA_, 0);
+    digitalWrite(pinA1A_, 0);
+    digitalWrite(pinB1A_, 0);
     for (int i = fromSpeed; i <= toSpeed; i++) {
 
         // avoid the stop during acceleration
@@ -132,8 +138,8 @@ uint8_t MotorDriverL9910::accelerateBackward(uint8_t fromSpeed, uint8_t toSpeed,
             return 0;
         }
 
-        analogWrite(pinAIB_, i);
-        analogWrite(pinBIB_, i);
+        analogWrite(pinA1B_, i);
+        analogWrite(pinB1B_, i);
         delay(accelerateSpeed);
     }
 
@@ -153,8 +159,8 @@ uint8_t MotorDriverL9910::deccelerateForward(uint8_t fromSpeed, uint8_t toSpeed,
         return 1;
     }
 
-    analogWrite(pinAIB_, 0);
-    analogWrite(pinBIB_, 0);
+    digitalWrite(pinA1B_, 0);
+    digitalWrite(pinB1B_, 0);
     for (int i = fromSpeed; i >= toSpeed; i--) {
 
         // avoid the stop during decceleration
@@ -164,8 +170,8 @@ uint8_t MotorDriverL9910::deccelerateForward(uint8_t fromSpeed, uint8_t toSpeed,
             return 0;
         }
 
-        analogWrite(pinAIA_, i);
-        analogWrite(pinBIA_, i);
+        analogWrite(pinA1A_, i);
+        analogWrite(pinB1A_, i);
         delay(deccelerateSpeed);
     }
 
@@ -185,8 +191,8 @@ uint8_t MotorDriverL9910::deccelerateBackward(uint8_t fromSpeed, uint8_t toSpeed
         return 1;
     }
 
-    analogWrite(pinAIA_, 0);
-    analogWrite(pinBIA_, 0);
+    digitalWrite(pinA1A_, 0);
+    digitalWrite(pinB1A_, 0);
     for (int i = fromSpeed; i >= toSpeed; i--) {
 
         // avoid the stop during decceleration
@@ -196,8 +202,8 @@ uint8_t MotorDriverL9910::deccelerateBackward(uint8_t fromSpeed, uint8_t toSpeed
             return 0;
         }
 
-        analogWrite(pinAIB_, i);
-        analogWrite(pinBIB_, i);
+        analogWrite(pinA1B_, i);
+        analogWrite(pinB1B_, i);
         delay(deccelerateSpeed);
     }
 
@@ -210,10 +216,10 @@ uint8_t MotorDriverL9910::deccelerateBackward(uint8_t fromSpeed, uint8_t toSpeed
  */
 void MotorDriverL9910::turnRight(int speed) const {
 
-    analogWrite(pinAIA_, 0);
-    analogWrite(pinAIB_, speed);
-    analogWrite(pinBIB_, 0);
-    analogWrite(pinBIA_, speed);
+    digitalWrite(pinA1A_, 0);
+    analogWrite(pinA1B_, speed);
+    digitalWrite(pinB1B_, 0);
+    analogWrite(pinB1A_, speed);
 }
 
 /**
@@ -222,10 +228,10 @@ void MotorDriverL9910::turnRight(int speed) const {
  */
 void MotorDriverL9910::turnLeft(int speed) const {
 
-    analogWrite(pinAIB_, 0);
-    analogWrite(pinAIA_, speed);
-    analogWrite(pinBIA_, 0);
-    analogWrite(pinBIB_, speed);
+    digitalWrite(pinA1B_, 0);
+    analogWrite(pinA1A_, speed);
+    digitalWrite(pinB1A_, 0);
+    analogWrite(pinB1B_, speed);
 }
 
 /**
