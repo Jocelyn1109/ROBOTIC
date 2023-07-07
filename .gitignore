@@ -48,3 +48,11 @@ LIBRARIES/MotorDriverL9910/.idea/
 LIBRARIES/MotorDriverL9910/cmake/
 LIBRARIES/MotorDriverL9910/cmake-build-debug/
 LIBRARIES/MotorDriverL9910/CMakeLists.txt
+
+LIBRARIES/MotorDriverL9110/.idea/
+
+LIBRARIES/MotorDriverL9110/cmake/
+
+LIBRARIES/MotorDriverL9110/cmake-build-debug/
+
+LIBRARIES/MotorDriverL9110/CMakeLists.txt

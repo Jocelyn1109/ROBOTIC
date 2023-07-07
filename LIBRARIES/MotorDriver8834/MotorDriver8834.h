@@ -72,7 +72,7 @@ public:
      * @param res: resolution as enum.
      * @return -1 in case of error, otherwise 0.
      */
-    uint8_t defineMicrostepResolution(microstep_resolution res)const;
+    uint8_t defineMicrostepResolution(microstep_resolution res) const;
 
     /**
      * Enable the driver (put the PIN SLEEP to HIGH).

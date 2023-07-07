@@ -10,7 +10,7 @@
 #include <Arduino.h>
 
 #include "Logger.h"
-#include "enum/LoggerLevel.hpp"
+#include "LoggerLevel.hpp"
 
 using namespace NSLoggerLevel;
 
