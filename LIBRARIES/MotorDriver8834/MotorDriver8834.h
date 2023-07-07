@@ -38,7 +38,7 @@ public:
     /**
      * Destructor
      */
-    ~MotorDriver8834();
+    virtual ~MotorDriver8834();
 
     /**
      * Initialize driver's pins.

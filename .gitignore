@@ -56,3 +56,11 @@ LIBRARIES/MotorDriverL9110/cmake/
 LIBRARIES/MotorDriverL9110/cmake-build-debug/
 
 LIBRARIES/MotorDriverL9110/CMakeLists.txt
+
+LIBRARIES/Lcd216Driver/.idea/
+
+LIBRARIES/Lcd216Driver/cmake/
+
+LIBRARIES/Lcd216Driver/cmake-build-debug/
+
+LIBRARIES/Lcd216Driver/CMakeLists.txt

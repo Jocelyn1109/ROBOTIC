@@ -28,7 +28,7 @@ public:
     /**
      * Destructor
      */
-    ~MotorDriverL9110();
+    virtual ~MotorDriverL9110();
 
     /**
      * Stop the motor.
