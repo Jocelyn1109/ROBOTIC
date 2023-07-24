@@ -111,4 +111,9 @@ const uint8_t CMD_SAVE_CUSTOM_CARACTER[] = {0xFE, 0xC1};
    0xFE 0xC0 - This loads the 8 characters saved in an EEPROM bank into the LCD memory. */
 const uint8_t CMD_LOAD_CUSTOM_CHARACTERS[] = {0xFE, 0xC0};
 
+/* Text */
+const uint8_t NEW_LINE = 0x0A;
+const uint8_t CARRIAGE_RETURN = 0x0D;
+const uint8_t BACKSPACE = 0x08;
+
 #endif //LCD216DRIVER_LCDPARAMS_H
