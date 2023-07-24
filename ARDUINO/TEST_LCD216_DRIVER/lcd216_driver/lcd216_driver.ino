@@ -54,7 +54,7 @@ void loop() {
 
     // Blue backlight color R:204, G:0, B:0
     lcd216Driver.setbacklightColor(0, 102, 204);
-    String infoMessage("INFORMATION MESSAGE");
+    String infoMessage("INFO MESSAGE");
     lcd216Driver.writeMessage(infoMessage);
 
     delay(5000);
