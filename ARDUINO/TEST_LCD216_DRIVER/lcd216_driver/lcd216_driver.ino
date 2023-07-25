@@ -7,7 +7,15 @@
   - setbacklightColor(...),
   - writeMessage(...),
   - clearScreen(),
-  - autoScrollOff().
+  - autoScrollOff(),
+  - setLcdSize(...),
+  - blockCursorOn(),
+  - blockCursorOff(),
+  - underlineCursorOn(),
+  - underlineCursorOff(),
+  - setCursorPosition(...),
+  - setDefaultColor(),
+  - setDefaultContrast().
 */
 
 #include "Lcd216Driver.h"
@@ -26,8 +34,14 @@ void setup() {
   // Initialisation du terminal serie
   Serial.begin(19200);
 
-  lcd216Driver.autoScrollOff();
+  //lcd216Driver.setLcdSize(16, 2);
 
+  lcd216Driver.autoScrollOff();
+  //lcd216Driver.blockCursorOn();
+  lcd216Driver.underlineCursorOn();
+
+  //lcd216Driver.setContrast(250);
+  lcd216Driver.setDefaultContrast();
 }
 
 void loop() {
@@ -40,6 +54,7 @@ void loop() {
     lcd216Driver.setbacklightColor(0, 153, 0);
     String okMessage("OK MESSAGE");
     lcd216Driver.writeMessage(okMessage);
+    lcd216Driver.setCursorPosition(11,1);
 
     delay(2000);
     lcd216Driver.clearScreen();
@@ -48,6 +63,7 @@ void loop() {
     lcd216Driver.setbacklightColor(204, 0, 0);
     String errorMessage("ERROR MESSAGE");
     lcd216Driver.writeMessage(errorMessage);
+    lcd216Driver.setCursorPosition(14,1);
 
     delay(2000);
     lcd216Driver.clearScreen();
@@ -56,10 +72,14 @@ void loop() {
     lcd216Driver.setbacklightColor(0, 102, 204);
     String infoMessage("INFO MESSAGE");
     lcd216Driver.writeMessage(infoMessage);
+    lcd216Driver.setCursorPosition(13,1);
 
     delay(5000);
     lcd216Driver.clearScreen();
-    lcd216Driver.setbacklightColor(255, 255, 255);
+    lcd216Driver.setDefaultColor();
+    delay(3000);
+    //lcd216Driver.blockCursorOff();
+    lcd216Driver.underlineCursorOff();
     start_test = false;
   }
 }

@@ -243,7 +243,7 @@ void Lcd216Driver::underlineCursorOff() {
 }
 
 /**
- * Turn on the blincking bloxk cursor.
+ * Turn on the blincking block cursor.
  */
 void Lcd216Driver::blockCursorOn() {
     lcd_.write(CMD_BLOCK_CURSOR_ON[0]);
@@ -252,7 +252,7 @@ void Lcd216Driver::blockCursorOn() {
 }
 
 /**
- * Turn off the blincking bloxk cursor.
+ * Turn off the blincking block cursor.
  */
 void Lcd216Driver::blockCursorOff() {
     lcd_.write(CMD_BLOCK_CURSOR_OFF[0]);
@@ -281,14 +281,14 @@ void Lcd216Driver::setbacklightColor(uint8_t red, uint8_t green, uint8_t blue) {
  * Method for setting the size of the LCD screen.
  * This command allows to indicate to the backpack the size of the screen which is attached to it.
  * This value is saved in the EEPROM and therefore, this operation must be performed only once.
- * @param nbRow: row number.
  * @param nbColumn: column number.
+ * @param nbRow: row number.
  */
-void Lcd216Driver::setLcdSize(uint8_t nbRow, uint8_t nbColumn) {
+void Lcd216Driver::setLcdSize(uint8_t nbColumn, uint8_t nbRow) {
     lcd_.write(CMD_SET_LCD_SIZE[0]);
     lcd_.write(CMD_SET_LCD_SIZE[1]);
-    lcd_.write(nbRow);
     lcd_.write(nbColumn);
+    lcd_.write(nbRow);
     delay(10);
 }
 
@@ -327,13 +327,32 @@ uint8_t Lcd216Driver::createCustomCharacter(uint8_t position, uint8_t *character
  */
 uint8_t Lcd216Driver::saveCustomCharacter(uint8_t bank) {
 
-    if (bank > 7) {
+    if (bank > 3) {
         return 1;
     }
 
     lcd_.write(CMD_SAVE_CUSTOM_CARACTER[0]);
     lcd_.write(CMD_SAVE_CUSTOM_CARACTER[1]);
     lcd_.write(bank);
+
+    delay(10);
+    return 0;
+}
+
+/**
+ * Method allowing the loading of the 8 characters saved in a bank of the EEPROM in the memory of the LCD.
+ * @param bankToLoad (there are 4 banks from 0 to 3 of storage and 8 positions per bank).
+ * @return 1 if bank number than expected, otherise 0.
+ */
+uint8_t Lcd216Driver::loadCustomCharacters(uint8_t bankToLoad) {
+
+    if (bankToLoad > 3) {
+        return 1;
+    }
+
+    lcd_.write(CMD_LOAD_CUSTOM_CHARACTERS[0]);
+    lcd_.write(CMD_LOAD_CUSTOM_CHARACTERS[1]);
+    lcd_.write(bankToLoad);
 
     delay(10);
     return 0;

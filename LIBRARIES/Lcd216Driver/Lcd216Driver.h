@@ -132,17 +132,17 @@ public:
     void underlineCursorOff();
 
     /**
-     * Turn on the blincking bloxk cursor.
+     * Turn on the blincking block cursor.
      */
     void blockCursorOn();
 
     /**
-     * Turn off the blincking bloxk cursor.
+     * Turn off the blincking block cursor.
      */
     void blockCursorOff();
 
-    /* RGB backlight and LCD size commands */
 
+    /* RGB backlight and LCD size commands */
 
     /**
      * Method for changing the background color of the LCD screen.
@@ -158,10 +158,10 @@ public:
      * Method for setting the size of the LCD screen.
      * This command allows to indicate to the backpack the size of the screen which is attached to it.
      * This value is saved in the EEPROM and therefore, this operation must be performed only once.
-     * @param nbRow: row number.
      * @param nbColumn: column number.
-     */
-    void setLcdSize(uint8_t nbRow, uint8_t nbColumn);
+     * @param nbRow: row number.
+ */
+    void setLcdSize(uint8_t nbColumn, uint8_t nbRow);
 
     /**
      * Method for creating a custom character.
@@ -182,7 +182,12 @@ public:
      */
     uint8_t saveCustomCharacter(uint8_t bank);
 
-    void loadCustomCharacters(uint8_t bankToLoad);
+    /**
+     * Method allowing the loading of the 8 characters saved in a bank of the EEPROM in the memory of the LCD.
+     * @param bankToLoad (there are 4 banks from 0 to 3 of storage and 8 positions per bank).
+     * @return 1 if bank number than expected, otherise 0.
+     */
+    uint8_t loadCustomCharacters(uint8_t bankToLoad);
 
     /* Read/Write message command */
     /**
