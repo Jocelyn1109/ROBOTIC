@@ -58,6 +58,7 @@ void loop() {
   if (start_test && resInitLog == 0) {
 
     Serial.println(F("Début du test"));
+    lcd216Driver.clearScreen();
 
     String errorMessage(F(""));
     // go forward - speed 200
@@ -73,6 +74,7 @@ void loop() {
       displayMessageOnLCD(errorMessage, 204, 0, 0);
     }
 
+    lcd216Driver.clearScreen();
 
     // go backward - speed 200
     infoMessage = F("GB-SPD200");
@@ -87,6 +89,7 @@ void loop() {
       displayMessageOnLCD(errorMessage, 204, 0, 0);
     }
 
+    lcd216Driver.clearScreen();
 
     // accelerate forward - speed 100 to 255
     infoMessage = F("AF->SPD255");
@@ -96,7 +99,9 @@ void loop() {
       errorMessage = F("AF ERROR");
       displayMessageOnLCD(errorMessage, 204, 0, 0);
     }
+
     delay(10000);
+    lcd216Driver.clearScreen();
 
     // decelerate forward - speed 255 to 100
     infoMessage = F("DF->SPD100");
@@ -106,8 +111,10 @@ void loop() {
       errorMessage = F("DF ERROR");
       displayMessageOnLCD(errorMessage, 204, 0, 0);
     }
+
     delay(10000);
     motorDriverL9110.stopMotor();
+    lcd216Driver.clearScreen();
     delay(100);
 
     // accelerate backward - speed 100 to 255
@@ -118,7 +125,9 @@ void loop() {
       errorMessage = F("AB ERROR");
       displayMessageOnLCD(errorMessage, 204, 0, 0);
     }
+
     delay(10000);
+    lcd216Driver.clearScreen();
 
     // decelerate backward - speed 255 to 100
     infoMessage = F("DB->SPD100");
@@ -128,8 +137,10 @@ void loop() {
       errorMessage = F("DB ERROR");
       displayMessageOnLCD(errorMessage, 204, 0, 0);
     }
+
     delay(10000);
     motorDriverL9110.stopMotor();
+    lcd216Driver.clearScreen();
     delay(300);
 
     // turn right
@@ -145,6 +156,7 @@ void loop() {
       displayMessageOnLCD(errorMessage, 204, 0, 0);
     }
 
+    lcd216Driver.clearScreen();
 
     // turn left
     infoMessage = F("TL->SPD100");
@@ -162,6 +174,10 @@ void loop() {
 
     Serial.println(F("Stop tests"));
     start_test = false;
+
+    lcd216Driver.clearScreen();
+    infoMessage = F("TEST OK");
+    displayMessageOnLCD(infoMessage, 0, 153, 0);
   }
 }
 
