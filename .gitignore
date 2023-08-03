@@ -64,3 +64,5 @@ LIBRARIES/Lcd216Driver/cmake/
 LIBRARIES/Lcd216Driver/cmake-build-debug/
 
 LIBRARIES/Lcd216Driver/CMakeLists.txt
+
+DOCUMENTATION/
