@@ -32,8 +32,31 @@
 
 #include <Adafruit_PWMServoDriver.h>
 
-uint16_t SERVOMIN_DS3225 = 166;   // La longueur d'impulsion 'minimale' du servo DS3225 25Kg (valeur du compteur, max 4096)
-uint16_t SERVOMAX_DS3225 = 673;  // La longueur d'impulsion 'maximale' du servo DS3225 25Kg (valeur du compteur, max 4096)
+/**
+  Formule pour trouver la largeur d’impulsion correspondante sur 4096 (2^12, 12bits).
+  Soit F la fréquence en Hz, T la période en secondes, pulseMin l'impulsion minimum en microsecondes spécifique au servo (donnée constructeur),
+  pulseMax l'impulsion maximum en microsecondes spécifique au servo (donnée constructeur), pwmMin l'impulsion minimum correspondante sur 4096 et
+  pwmMax l'impulsion maximum correspondante sur 4096.
+
+  Ici T sera exprimé microsecondes.
+  - pwmMin = (pulseMin/T) * 4096
+  - pwmMax = (pulseMax/T) * 4096
+
+  Exemple dans le cas du servo DS3225 25Kg (Plage de largeur d'impulsion: 500 ~ 2500 μsec)
+  F = 60Hz => T = 0.016s soit 16ms ou encore 16 000 μsec.
+  pulseMin = 500 microsecondes (donnée constructeur).
+  pulseMax = 2500 microsecondes (donnée constructeur).
+
+  pwmMin = (500/16000) * 4096 = 128 (on pourra prendre 130 pour avoir une marge de sécurité).
+  pwmMax = (2500/16000) * 4096 = 640 (on pourra prendre 638 pour avoir une marge de sécurité).
+*/
+
+//uint16_t SERVOMIN_DS3225 = 166;
+//uint16_t SERVOMAX_DS3225 = 673;
+uint16_t SERVOMIN_DS3225 = 128;  // La longueur d'impulsion 'minimale' pwm du servo DS3225 25Kg (valeur du compteur, max 4096 -> voir formule)
+uint16_t SERVOMAX_DS3225 = 638;  // La longueur d'impulsion 'maximale' pwm du servo DS3225 25Kg (valeur du compteur, max 4096 - -> voir formule)
+uint16_t PULSE_MIN = 500;
+uint16_t PULSE_MAX = 2500;
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 const uint8_t servo_0 = 0;
@@ -45,6 +68,7 @@ bool start_test = false;
 float degrees = 0.0;
 bool test1 = false;
 bool test2 = false;
+bool test3 = false;
 volatile bool stop_servo = false;
 int interval = 3;
 
@@ -81,7 +105,7 @@ void loop() {
   // Lecture des commandes sur le port série.
   // On attend plusieurs types de commandes:
   // - F:XXX, permet de spécifier la fréquence (XXX étant la valeur de la fréquence).
-  // - T1 pour lancer le test 1 et T2 pour le 2.
+  // - T1 pour lancer le test 1, T2 pour le 2 et T3 pour lancer le test 3.
   // - TRUE/FALSE, qui permet d'activer ou non le test.
   // - MAX:XXX, permet de spécifier la pulse max.
   // - MIN:XXX, permet de spécifier la pulse min.
@@ -96,6 +120,38 @@ void loop() {
     Serial.println(command);
   }
 
+  extractEntryData(command);
+
+  if (start_test && initBreakout) {
+
+    Serial.print(F("Valeur de SERVOMIN_MG996R: "));
+    Serial.println(SERVOMIN_DS3225);
+    Serial.print(F("Valeur de SERVOMAX_MG996R: "));
+    Serial.println(SERVOMAX_DS3225);
+
+    if (test1) {
+      Serial.println(F("TEST 1"));
+      test_1();
+    } else if (test2) {
+      Serial.println(F("TEST 2"));
+      test_2();
+      stop_servo = false;
+    } else if (test3) {
+      Serial.println(F("TEST 3"));
+      test_3();
+      stop_servo = false;
+    }
+
+    start_test = false;
+  }
+}
+
+
+/**
+  Extrait les données lues sur l'entrée série
+*/
+void extractEntryData(String command) {
+
   if (command == "TRUE") {
     start_test = true;
   } else if (command == "FALSE") {
@@ -103,9 +159,15 @@ void loop() {
   } else if (command == "T1") {
     test1 = true;
     test2 = false;
+    test3 = false;
   } else if (command == "T2") {
     test2 = true;
     test1 = false;
+    test3 = false;
+  } else if (command == "T3") {
+    test3 = true;
+    test1 = false;
+    test2 = false;
   } else if (command.charAt(0) == 'F') {
     String freqStr = command.substring(2, command.length());
     Serial.print(F("Valeur de la fréquence: "));
@@ -142,27 +204,6 @@ void loop() {
       Serial.println(F("Commande non reconnue !"));
     }
   }
-
-  if (start_test && initBreakout) {
-
-    Serial.print(F("Valeur de SERVOMIN_MG996R: "));
-    Serial.println(SERVOMIN_DS3225);
-    Serial.print(F("Valeur de SERVOMAX_MG996R: "));
-    Serial.println(SERVOMAX_DS3225);
-
-    if (test1) {
-      Serial.println(F("TEST 1"));
-      test_1();
-    }
-
-    if (test2) {
-      Serial.println(F("TEST 2"));
-      test_2();
-      stop_servo = false;
-    }
-
-    start_test = false;
-  }
 }
 
 void neutral(const uint8_t servo_num) {
@@ -191,6 +232,9 @@ void test_1() {
   delay(500);
 }
 
+/**
+  Test avec la fonction setPWM.
+*/
 void test_2() {
 
   pwm.setPWM(servo_0, 0, SERVOMIN_DS3225);
@@ -221,6 +265,39 @@ void test_2() {
   }
 }
 
-void stopServo(){
+/**
+  Test avec la fonction writeMicroseconds.
+*/
+void test_3() {
+
+  pwm.writeMicroseconds(servo_0, PULSE_MIN);
+  pwm.writeMicroseconds(servo_1, PULSE_MIN);
+
+  delay(2000);
+
+  for (uint16_t pulselen = PULSE_MIN; pulselen < PULSE_MAX; pulselen++) {
+    if (stop_servo) {
+      Serial.println(F("STOP"));
+      break;
+    }
+    pwm.writeMicroseconds(servo_0, pulselen);
+    pwm.writeMicroseconds(servo_1, pulselen);
+    delay(interval);
+  }
+
+  delay(5000);
+
+  for (uint16_t pulselen = PULSE_MAX; pulselen > PULSE_MIN; pulselen--) {
+    if (stop_servo) {
+      Serial.println(F("STOP"));
+      break;
+    }
+    pwm.writeMicroseconds(servo_0, pulselen);
+    pwm.writeMicroseconds(servo_1, pulselen);
+    delay(interval);
+  }
+}
+
+void stopServo() {
   stop_servo = true;
 }
