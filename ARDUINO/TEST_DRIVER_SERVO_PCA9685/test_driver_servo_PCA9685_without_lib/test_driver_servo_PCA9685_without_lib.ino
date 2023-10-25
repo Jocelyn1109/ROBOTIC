@@ -10,11 +10,15 @@
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
-#define SERVOMIN 100  // La longueur d'impulsion 'minimale' (valeur du compteur, max 4096)
-#define SERVOMAX 650  // La longueur d'impulsion 'maximale' (valeur du compteur, max 4096)
+// Suivant le type de servo utilisé, la largeur d'impulsion minimale et Maximale
+// peut changer. L'idéal est de sélectionner des valeurs aussi petites et aussi
+// grande que possible sans jamais atteindre la butée de blocage du servo-moteur.
+// Mmodifier ces valeurs pour les faire correspondrent au type de servo.
+// Min et Max pour servo MG996R
+#define SERVOMIN 177          // La longueur d'impulsion 'minimale' (valeur du compteur, max 4096)
+#define SERVOMAX 673          // La longueur d'impulsion 'maximale' (valeur du compteur, max 4096)
 
-uint8_t servo_14 = 14;
-uint8_t servo_15 = 15;
+uint8_t servo_1 = 1;
 
 bool initBreakout;
 bool start_test = true;
@@ -22,14 +26,16 @@ bool start_test = true;
 void setup() {
 
   Serial.begin(19200);
-  Serial.println("Controle des Servo Moteur #14 et #15");
 
   initBreakout = pwm.begin();
   if (initBreakout) {
-    pwm.setPWMFreq(60);  // Les servo sont mis-à-jour à ~60 Hz
+    pwm.setPWMFreq(SERVO_FREQ);  // servo sont mis-à-jour à ~50 Hz pour MG996R.
+    pwm.setOscillatorFrequency(27000000);
   } else {
-    Serial.println("Erreur d'initialisation du breakout.");
+    Serial.println(F("Erreur d'initialisation du breakout."));
   }
+
+  delay(10);
 }
 
 void loop() {
@@ -37,61 +43,122 @@ void loop() {
   if (initBreakout && start_test) {
 
 
-    Serial.println("Servo #14 à 180 degrés");
-    // Transformation de degré (0 à 180) en pulse (SERVOMIN à SERVOMAX)
-    int pulseLen = map(180, 0, 180, SERVOMIN, SERVOMAX);
-    pwm.setPWM(servo_14, 0, pulseLen);
+    // for (uint16_t pulselen = SERVOMAX; pulselen > SERVOMIN; pulselen--) {
+    //   String pulse_0 = F("Pulse: ");
+    //   pulse_0.concat(pulselen);
+    //   Serial.println(pulse_0);
+    //   pwm.setPWM(servo_0, 0, pulselen);
+    // }
 
-    delay(5000);
+    // delay(500);
 
-    Serial.println("Servo #15 à 180 degrés");
-    // Transformation de degré (0 à 180) en pulse (SERVOMIN à SERVOMAX)
-    pulseLen = map(180, 0, 180, SERVOMIN, SERVOMAX);
-    pwm.setPWM(servo_15, 0, pulseLen);
+    // for (uint16_t pulselen = SERVOMAX; pulselen > SERVOMIN; pulselen--) {
+    //   String pulse_0 = F("Pulse: ");
+    //   pulse_0.concat(pulselen);
+    //   Serial.println(pulse_0);
+    //   pwm.setPWM(servo_1, 0, pulselen);
+    // }
 
-    delay(5000);
 
-    pulseLen = map(0, 0, 180, SERVOMIN, SERVOMAX);
-    pwm.setPWM(servo_14, 0, pulseLen);
-    pwm.setPWM(servo_15, 0, pulseLen);
+    //pwm.setPWM(servo_1, 0, 1500);
 
-    //--- Controle du Premier Servo (no 14) ---
-    // Serial.println("Servo #14 à 45 degrés");
-    // // Transformation de degré (0 à 180) en pulse (SERVOMIN à SERVOMAX)
-    // int pulseLen = map(45, 0, 180, SERVOMIN, SERVOMAX);
-    // pwm.setPWM(servo_14, 0, pulseLen);
+    //O°
+    Serial.println(F("Servo 1 à 0 degré"));
+    int pulseLen = map(0, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    String pulse_0 = F("Pulse pour 0 degré: ");
+    pulse_0.concat(pulseLen);
+    Serial.println(pulse_0);
+    //pwm.setPWM(servo_1, 0, pulseLen);
+    pwm.setPWM(servo_1, 0, 500);
 
+    delay(10000);
+
+    //Neutre (180°)
+    Serial.println(F("Servo 1 à 135 degré"));
+    pulseLen = map(135, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    String pulse_135 = F("Pulse pour 135 degré: ");
+    pulse_135.concat(pulseLen);
+    Serial.println(pulse_135);
+    //pwm.setPWM(servo_1, 0, pulseLen);
+    pwm.setPWM(servo_1, 0, 1500);
+
+    delay(10000);
+
+    // 270°
+    Serial.println(F("Servo 1 à 270 degré"));
+    pulseLen = map(270, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    String pulse_270 = F("Pulse pour 270 degré: ");
+    pulse_270.concat(pulseLen);
+    Serial.println(pulse_270);
+    //pwm.setPWM(servo_1, 0, pulseLen);
+    pwm.setPWM(servo_1, 0, 2500);
+
+
+    // Serial.println(F("Servo 0 à 180 degré"));
+    // int pulseLen = map(180, 0, 180, SERVOMIN, SERVOMAX);
+    // String pulse_0 = F("Pulse pour 0 degré: ");
+    // pulse_0.concat(pulseLen);
+    // Serial.println(pulse_0);
+    // pwm.setPWM(servo_0, 0, pulseLen);
     // delay(1000);
-
-    //--- Controle du Deuxieme Servo (no 15) ---
-    // Serial.println("Servo #15 à 30 degrés");
-    // pulseLen = map(30, 0, 180, SERVOMIN, SERVOMAX);
+    // pwm.setPWM(servo_14, 0, pulseLen);
+    // delay(1000);
     // pwm.setPWM(servo_15, 0, pulseLen);
 
-    // delay(1000);
 
-    //--- Controle du Premier Servo (no 14) ---
-    // Serial.println("Servo #14 à 120 degrés");
-    // // Transformation de degré (0 à 180) en pulse (SERVOMIN à SERVOMAX)
-    // pulseLen = map(120, 0, 180, SERVOMIN, SERVOMAX);
+
+    // Serial.println(F("Servo 14 à 45 degrés"));
+    // pulseLen = map(45, 0, 180, SERVOMIN, SERVOMAX);
+    // String pulse_45 = F("Pulse pour 45 degrés: ");
+    // pulse_45.concat(pulseLen);
+    // Serial.println(pulse_45);
     // pwm.setPWM(servo_14, 0, pulseLen);
 
-    // delay(1000);
+    // delay(3000);
 
-    //--- Controle du Deuxieme Servo (no 15) ---
-    // Serial.println("Servo #15 à 150 degrés");
-    // pulseLen = map(150, 0, 180, SERVOMIN, SERVOMAX);
+    // Serial.println(F("Servo 14 à 90 degrés"));
+    // pulseLen = map(90, 0, 180, SERVOMIN, SERVOMAX);
+    // String pulse_90 = F("Pulse pour 90 degrés: ");
+    // pulse_90.concat(pulseLen);
+    // Serial.println(pulse_90);
+    // pwm.setPWM(servo_14, 0, pulseLen);
+
+    // delay(3000);
+
+    // Serial.println(F("Servo 14 à 135 degrés"));
+    // pulseLen = map(135, 0, 180, SERVOMIN, SERVOMAX);
+    // String pulse_135 = F("Pulse pour 135 degrés: ");
+    // pulse_135.concat(pulseLen);
+    // Serial.println(pulse_135);
+    // pwm.setPWM(servo_14, 0, pulseLen);
+
+    // delay(3000);
+
+    // Serial.println(F("Servo 14/15 à 180 degrés"));
+    // pulseLen = map(180, 0, 180, SERVOMIN, SERVOMAX);
+    // String pulse_180 = F("Pulse pour 90 degrés: ");
+    // pulse_180.concat(pulseLen);
+    // Serial.println(pulse_180);
+    // pwm.setPWM(servo_13, 0, pulseLen);
+    // delay(1000);
+    // pwm.setPWM(servo_14, 0, pulseLen);
+    // delay(1000);
     // pwm.setPWM(servo_15, 0, pulseLen);
 
+
     // delay(1000);
 
-    //--- Les deux servo à 0 ---
-    // Serial.println("Servo #14 et #15 à 150 degrés");
+    // Serial.println(F("Servo 14/15 à 0 degré"));
     // pulseLen = map(0, 0, 180, SERVOMIN, SERVOMAX);
+    // pulse_0 = F("Pulse pour 0 degré: ");
+    // pulse_0.concat(pulseLen);
+    // Serial.println(pulse_0);
+    // pwm.setPWM(servo_13, 0, pulseLen);
+    // delay(1000);
     // pwm.setPWM(servo_14, 0, pulseLen);
-    //pwm.setPWM(servo_15, 0, pulseLen);
+    // delay(1000);
+    // pwm.setPWM(servo_15, 0, pulseLen);
 
-    //delay(3000);
 
     start_test = false;
   }
