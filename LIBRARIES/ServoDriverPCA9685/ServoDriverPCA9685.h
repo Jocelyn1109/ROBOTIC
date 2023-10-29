@@ -44,7 +44,7 @@ private:
      * @param pulse pulse value in microseconds.
      * @return the corresponding pulse value width on 4096 (2^12, 12bits).
      */
-    uint16_t convertePulseMicroSecondTo4096(uint16_t pulse);
+    uint16_t convertePulseMicroSecondTo4096(uint16_t pulse) const;
 
 };
 

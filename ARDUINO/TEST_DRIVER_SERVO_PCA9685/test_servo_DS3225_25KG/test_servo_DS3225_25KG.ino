@@ -51,10 +51,10 @@
   pwmMax = (2500/16000) * 4096 = 640 (on pourra prendre 638 pour avoir une marge de sécurité).
 */
 
-//uint16_t SERVOMIN_DS3225 = 166;
-//uint16_t SERVOMAX_DS3225 = 673;
-uint16_t SERVOMIN_DS3225 = 128;  // La longueur d'impulsion 'minimale' pwm du servo DS3225 25Kg (valeur du compteur, max 4096 -> voir formule)
-uint16_t SERVOMAX_DS3225 = 638;  // La longueur d'impulsion 'maximale' pwm du servo DS3225 25Kg (valeur du compteur, max 4096 - -> voir formule)
+uint16_t SERVOMIN_DS3225 = 166;
+uint16_t SERVOMAX_DS3225 = 673;
+//uint16_t SERVOMIN_DS3225 = 128;  // La longueur d'impulsion 'minimale' pwm du servo DS3225 25Kg (valeur du compteur, max 4096 -> voir formule)
+//uint16_t SERVOMAX_DS3225 = 638;  // La longueur d'impulsion 'maximale' pwm du servo DS3225 25Kg (valeur du compteur, max 4096 - -> voir formule)
 uint16_t PULSE_MIN = 500;
 uint16_t PULSE_MAX = 2500;
 
@@ -207,7 +207,8 @@ void extractEntryData(String command) {
 }
 
 void neutral(const uint8_t servo_num) {
-  int pulseLen = map(135, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  //int pulseLen = map(135, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  int pulseLen = map(133, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
   pwm.setPWM(servo_num, 0, pulseLen);
 }
 
@@ -299,5 +300,5 @@ void test_3() {
 }
 
 void stopServo() {
-  stop_servo = true;
+  //stop_servo = true;
 }
