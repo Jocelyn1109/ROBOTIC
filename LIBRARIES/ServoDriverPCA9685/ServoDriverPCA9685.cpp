@@ -51,10 +51,11 @@ uint16_t ServoDriverPCA9685::convertePulseMicroSecondTo4096(uint16_t pulse) cons
 
     double pulse4096 = 0;
     //period in second
-    double periode = 1 / frequence;
+    double period = 1 / frequence;
+    period = floor(period * 1000)/1000; // 3 digits after comma
     //periode in microseconds
-    periode = periode * pow(10, 6);
-    pulse4096 = (pulse / periode) * 4096;
+    period = period * pow(10, 6);
+    pulse4096 = (pulse / period) * 4096;
 
     // the precision to the comma is not necessary.
     return (uint16_t) pulse4096;

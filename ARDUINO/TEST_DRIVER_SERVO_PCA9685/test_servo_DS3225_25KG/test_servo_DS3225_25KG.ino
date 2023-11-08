@@ -70,7 +70,7 @@ bool test1 = false;
 bool test2 = false;
 bool test3 = false;
 volatile bool stop_servo = false;
-int interval = 3;
+int interval = 1;
 
 void setup() {
 
@@ -128,6 +128,7 @@ void loop() {
     Serial.println(SERVOMIN_DS3225);
     Serial.print(F("Valeur de SERVOMAX_MG996R: "));
     Serial.println(SERVOMAX_DS3225);
+    pulsesInfo();
 
     if (test1) {
       Serial.println(F("TEST 1"));
@@ -207,8 +208,7 @@ void extractEntryData(String command) {
 }
 
 void neutral(const uint8_t servo_num) {
-  //int pulseLen = map(135, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
-  int pulseLen = map(133, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  int pulseLen = map(135, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
   pwm.setPWM(servo_num, 0, pulseLen);
 }
 
@@ -301,4 +301,20 @@ void test_3() {
 
 void stopServo() {
   //stop_servo = true;
+}
+
+void pulsesInfo() {
+  bool start = true;
+  float deg = 0.0;
+  while (start) {
+    int pulseLen = map(deg, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    Serial.print(deg);
+    Serial.print(F("° = "));
+    Serial.println(pulseLen);
+    deg = deg + 10.0;
+
+    if (deg > 270.0) {
+      start = false;
+    }
+  }
 }
