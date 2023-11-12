@@ -5,10 +5,11 @@
  * Constructor
  * @param addr address of the PCA9685 on the I2C bus.
  */
-ServoDriverPCA9685::ServoDriverPCA9685(const uint8_t addr) {
+ServoDriverPCA9685::ServoDriverPCA9685(const uint8_t addr, float frequence, uint32_t oscillatorFrequency) {
     pwmPCA9685 = Adafruit_PWMServoDriver(addr);
-    frequence = 50;
-    pwmPCA9685.setPWMFreq(frequence);
+    frequence_ = frequence;
+    pwmPCA9685.setPWMFreq(frequence_);
+    pwmPCA9685.setOscillatorFrequency(oscillatorFrequency);
 }
 
 /**
@@ -42,6 +43,39 @@ void ServoDriverPCA9685::setDegrees(const uint8_t numServo, long degrees, long m
 
 }
 
+/**
+ * Sets the PWM output of one of the PCA9685 pins.
+ * @param servoNum one of the servo (PWM output pins), from 0 to 15.
+ * @param on at what point in the 4096-part cycle to turn the PWM output ON.
+ * @param off at what point in the 4096-part cycle to turn the PWM output OFF.
+ * @return 0 if successful, otherwise 1.
+ */
+uint8_t ServoDriverPCA9685::setPWMOutput(int8_t servoNum, uint16_t on, uint16_t off) {
+
+    if (servoNum >= 0 && servoNum <= 15) {
+        pwmPCA9685.setPWM(servoNum, on, off);
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+/**
+ * Sets the PWM output of one of the PCA9685 pins based on the input microseconds, output is not precise.
+ * @param servoNum one of the servo (PWM output pins), from 0 to 15.
+ * @param Microseconds the number of Microseconds to turn the PWM output ON.
+ * @return 0 if successful, otherwise 1.
+ */
+uint8_t ServoDriverPCA9685::writeMicroseconds(uint8_t servoNum, uint16_t Microseconds) {
+
+    if (servoNum >= 0 && servoNum <= 15) {
+        pwmPCA9685.writeMicroseconds(servoNum, Microseconds);
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
 /***
  * Converte pulse in microseconds to the corresponding pulse value width on 4096 (2^12, 12bits).
  * @param pulse pulse value in microseconds.
@@ -51,8 +85,8 @@ uint16_t ServoDriverPCA9685::convertePulseMicroSecondTo4096(uint16_t pulse) cons
 
     double pulse4096 = 0;
     //period in second
-    double period = 1 / frequence;
-    period = floor(period * 1000)/1000; // 3 digits after comma
+    double period = 1 / frequence_;
+    period = floor(period * 1000) / 1000; // 3 digits after comma
     //periode in microseconds
     period = period * pow(10, 6);
     pulse4096 = (pulse / period) * 4096;

@@ -14,9 +14,11 @@ public:
 
     /**
      * Constructor
-     * @param addr address of the PCA9685 on the I2C bus.
+     * @param addr address of the PCA9685 on the I2C bus - 0x40 by default.
+     * @param frequence PWM frequency for the entire chip - by default 50.0.
+     * @param oscillatorFrequency the internally tracked oscillator used for freq calculations - by default 25000000.
      */
-    explicit ServoDriverPCA9685(uint8_t addr = 0x40);
+    explicit ServoDriverPCA9685(uint8_t addr = 0x40, float frequence = 50.0, uint32_t oscillatorFrequency = 25000000);
 
     /**
      * Copy constructor
@@ -35,9 +37,26 @@ public:
      */
     void setDegrees(uint8_t numServo, long degrees, long maxDegree, uint16_t servoMin, uint16_t servoMax, bool is4096);
 
+    /**
+     * Sets the PWM output of one of the PCA9685 pins.
+     * @param servoNum one of the servo (PWM output pins), from 0 to 15.
+     * @param on at what point in the 4096-part cycle to turn the PWM output ON.
+     * @param off at what point in the 4096-part cycle to turn the PWM output OFF.
+     * @return 0 if successful, otherwise 1.
+     */
+    uint8_t setPWMOutput(int8_t servoNum, uint16_t on, uint16_t off);
+
+    /**
+     * Sets the PWM output of one of the PCA9685 pins based on the input microseconds, output is not precise.
+     * @param servoNum one of the servo (PWM output pins), from 0 to 15.
+     * @param Microseconds the number of Microseconds to turn the PWM output ON.
+     * @return 0 if successful, otherwise 1.
+     */
+    uint8_t writeMicroseconds(uint8_t servoNum, uint16_t Microseconds);
+
 private:
     Adafruit_PWMServoDriver pwmPCA9685;
-    float frequence;
+    float frequence_;
 
     /***
      * Converte pulse in microseconds to the corresponding pulse value width on 4096 (2^12, 12bits).

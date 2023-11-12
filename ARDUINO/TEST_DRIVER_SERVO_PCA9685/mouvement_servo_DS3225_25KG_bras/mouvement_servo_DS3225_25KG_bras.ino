@@ -43,6 +43,7 @@ bool start_test = false;
 bool test1 = false;
 bool test2 = false;
 float currentDegrees = 0.0;
+float currentDegreesArray[6] = {};
 float degrees = 0.0;
 int interval = 1;
 
@@ -155,6 +156,14 @@ void extractEntryData(String command) {
 */
 void test_1() {
 
+  //TODO:à tester
+  uint16_t currentPWMOutput = pwm.getPWM(servo_0);
+  int curDeg = map(currentPWMOutput, SERVOMIN_DS3225, SERVOMAX_DS3225, 0, 270);
+  Serial.print("Current PWM in degrees: ");
+  Serial.println(curDeg);
+  Serial.print("Current degrees saved: ");
+  Serial.println(currentDegrees);
+  
   float deg = 0.0;
   for (deg = currentDegrees; deg < degrees; deg++) {
     int pulseLen = map(deg, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
