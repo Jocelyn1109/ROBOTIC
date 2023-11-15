@@ -33,8 +33,10 @@
 
 #include <Adafruit_PWMServoDriver.h>
 
-uint16_t SERVOMIN_DS3225 = 166;
-uint16_t SERVOMAX_DS3225 = 673;
+// uint16_t SERVOMIN_DS3225 = 166;
+// uint16_t SERVOMAX_DS3225 = 673;
+float SERVOMIN_DS3225 = 166.0;
+float SERVOMAX_DS3225 = 673.0;
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 const uint8_t servo_0 = 0;
 float freq = 60;
@@ -42,8 +44,6 @@ bool initBreakout = false;
 bool start_test = false;
 bool test1 = false;
 bool test2 = false;
-float currentDegrees = 0.0;
-float currentDegreesArray[6] = {};
 float degrees = 0.0;
 int interval = 1;
 
@@ -109,12 +109,18 @@ void loop() {
 
 
 void neutral(const uint8_t servo_num) {
-  int pulseLen = map(135, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
-  pwm.setPWM(servo_num, 0, pulseLen);
-  currentDegrees = 135.0;
+  uint16_t currentPWMOutput = pwm.getPWM(servo_0, true);
+  Serial.print(F("Current PWM: "));
+  Serial.println(currentPWMOutput);
 
-  Serial.print(F("Current degrees: "));
-  Serial.println(currentDegrees);
+  float curDeg = map(currentPWMOutput, SERVOMIN_DS3225, SERVOMAX_DS3225, 0.0, 270.0);
+  curDeg = curDeg + 1.0;  // +1 pour les écarts de conversion
+  Serial.print(F("Current PWM in degrees: "));
+  Serial.println(curDeg);
+  Serial.println(F(""));
+
+  float pulseLen = map(135.0, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  pwm.setPWM(servo_num, 0, pulseLen);
 }
 
 
@@ -156,25 +162,22 @@ void extractEntryData(String command) {
 */
 void test_1() {
 
-  //TODO:à tester
-  uint16_t currentPWMOutput = pwm.getPWM(servo_0);
-  int curDeg = map(currentPWMOutput, SERVOMIN_DS3225, SERVOMAX_DS3225, 0, 270);
-  Serial.print("Current PWM in degrees: ");
-  Serial.println(curDeg);
-  Serial.print("Current degrees saved: ");
-  Serial.println(currentDegrees);
-  
-  float deg = 0.0;
-  for (deg = currentDegrees; deg < degrees; deg++) {
-    int pulseLen = map(deg, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
-    pwm.setPWM(servo_0, 0, pulseLen);
-    Serial.println(pulseLen);
-    delay(interval);
-  }
-  currentDegrees = deg;
+  uint16_t currentPWMOutput = pwm.getPWM(servo_0, true);
+  Serial.print(F("Current PWM: "));
+  Serial.println(currentPWMOutput);
 
-  Serial.print(F("Current degrees: "));
-  Serial.println(currentDegrees);
+  float curDeg = map(currentPWMOutput, SERVOMIN_DS3225, SERVOMAX_DS3225, 0.0, 270.0);
+  curDeg = curDeg + 1.0;  // +1 pour les écarts de conversion
+  Serial.print(F("Current PWM in degrees: "));
+  Serial.println(curDeg);
+  Serial.println(F(""));
+
+  for (float deg = curDeg; deg <= degrees; deg++) {
+    float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    pwm.setPWM(servo_0, 0, pulseLen);
+    delay(interval);
+    Serial.println(deg);
+  }
 }
 
 
@@ -183,15 +186,35 @@ void test_1() {
 */
 void test_2() {
 
-  float deg = 0.0;
-  for (deg = currentDegrees; deg > degrees; deg--) {
-    int pulseLen = map(deg, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
-    pwm.setPWM(servo_0, 0, pulseLen);
-    Serial.println(pulseLen);
-    delay(interval);
-  }
-  currentDegrees = deg;
+  uint16_t currentPWMOutput = pwm.getPWM(servo_0, true);
+  Serial.print(F("Current PWM: "));
+  Serial.println(currentPWMOutput);
 
-  Serial.print(F("Current degrees: "));
-  Serial.println(currentDegrees);
+  float curDeg = map(currentPWMOutput, SERVOMIN_DS3225, SERVOMAX_DS3225, 0.0, 270.0);
+  curDeg = curDeg + 1.0;  // +1 pour les écarts de conversion
+  Serial.print(F("Current PWM in degrees: "));
+  Serial.println(curDeg);
+  Serial.println(F(""));
+
+  for (float deg = curDeg; deg >= degrees; deg--) {
+    float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    pwm.setPWM(servo_0, 0, pulseLen);
+    delay(interval);
+    Serial.println(deg);
+  }
+}
+
+
+uint16_t convertePulseMicroSecondTo4096(uint16_t pulse) {
+
+  double pulse4096 = 0;
+  //period in second
+  double period = 1 / freq;
+  period = floor(period * 1000) / 1000;  // 3 digits after comma
+  //periode in microseconds
+  period = period * pow(10, 6);
+  pulse4096 = (pulse / period) * 4096;
+
+  // the precision to the comma is not necessary.
+  return (uint16_t)pulse4096;
 }
