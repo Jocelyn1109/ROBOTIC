@@ -35,7 +35,7 @@ public:
      * @param servoMax the corresponding maximum pulse width on 4096 (2^12, 12bits) or in microseconds.
      * @param is4096 is true servoMin and servoMax must be on 4096 (2^12, 12bits) otherwise in microseconds.
      */
-    void setDegrees(uint8_t numServo, long degrees, long maxDegree, uint16_t servoMin, uint16_t servoMax, bool is4096);
+    void setDegrees(uint8_t numServo, long degrees, long maxDegree, long servoMin, long servoMax, bool is4096);
 
     /**
      * Sets the PWM output of one of the PCA9685 pins.
@@ -54,6 +54,16 @@ public:
      */
     uint8_t writeMicroseconds(uint8_t servoNum, uint16_t Microseconds);
 
+    /**
+     * Get the current degrees of the servo.
+     * @param servoNum servo number.
+     * @param maxDegree the maximum degree value of the servo (ex: 180°, 360°...).
+     * @param servoMin the corresponding minimum pulse width on 4096 (2^12, 12bits).
+     * @param servoMax the corresponding maximum pulse width on 4096 (2^12, 12bits).
+     * @return the current degrees (position of the servo) otherwise -1;
+     */
+    float getCurrentDegrees(uint8_t servoNum, long maxDegree, long servoMin, long servoMax);
+
 private:
     Adafruit_PWMServoDriver pwmPCA9685;
     float frequence_;
@@ -63,7 +73,7 @@ private:
      * @param pulse pulse value in microseconds.
      * @return the corresponding pulse value width on 4096 (2^12, 12bits).
      */
-    uint16_t convertePulseMicroSecondTo4096(uint16_t pulse) const;
+    uint16_t convertePulseMicroSecondTo4096(long pulse) const;
 
 };
 

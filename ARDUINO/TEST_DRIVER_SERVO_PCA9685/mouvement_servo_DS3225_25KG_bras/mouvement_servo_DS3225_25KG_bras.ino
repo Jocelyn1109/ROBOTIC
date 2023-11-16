@@ -33,10 +33,8 @@
 
 #include <Adafruit_PWMServoDriver.h>
 
-// uint16_t SERVOMIN_DS3225 = 166;
-// uint16_t SERVOMAX_DS3225 = 673;
-float SERVOMIN_DS3225 = 166.0;
-float SERVOMAX_DS3225 = 673.0;
+long SERVOMIN_DS3225 = 166.0;
+long SERVOMAX_DS3225 = 673.0;
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 const uint8_t servo_0 = 0;
 float freq = 60;
@@ -64,7 +62,11 @@ void setup() {
     pwm.setOscillatorFrequency(27000000);
 
     //Servo au neutre
-    neutral(servo_0);
+    uint16_t pwmOutput = pwm.getPWM(servo_0, true);
+    if (pwmOutput > 673.0 || pwmOutput < 0.0) {
+      neutral(servo_0);
+    }
+
 
   } else {
     Serial.println(F("Erreur d'initialisation du breakout."));
@@ -137,6 +139,8 @@ void extractEntryData(String command) {
   } else if (command == "T2") {
     test2 = true;
     test1 = false;
+  } else if (command == "PWM") {
+    displayCurrentPWM();
   } else if (command == "NEUTRE") {
     neutral(servo_0);
   } else if (command.charAt(0) == 'D') {
@@ -162,6 +166,10 @@ void extractEntryData(String command) {
 */
 void test_1() {
 
+  if (degrees < 0.0 || degrees > 270.0) {
+    return;
+  }
+
   uint16_t currentPWMOutput = pwm.getPWM(servo_0, true);
   Serial.print(F("Current PWM: "));
   Serial.println(currentPWMOutput);
@@ -186,6 +194,10 @@ void test_1() {
 */
 void test_2() {
 
+  if (degrees < 0.0 || degrees > 270.0) {
+    return;
+  }
+
   uint16_t currentPWMOutput = pwm.getPWM(servo_0, true);
   Serial.print(F("Current PWM: "));
   Serial.println(currentPWMOutput);
@@ -202,6 +214,14 @@ void test_2() {
     delay(interval);
     Serial.println(deg);
   }
+}
+
+
+void displayCurrentPWM() {
+  uint16_t currentPWMOutput = pwm.getPWM(servo_0, true);
+  Serial.print(F("Current PWM: "));
+  Serial.println(currentPWMOutput);
+  Serial.println(F(""));
 }
 
 
