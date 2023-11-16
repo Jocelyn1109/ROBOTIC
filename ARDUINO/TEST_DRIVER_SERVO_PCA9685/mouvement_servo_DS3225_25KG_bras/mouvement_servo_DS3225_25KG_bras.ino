@@ -82,6 +82,7 @@ void loop() {
   // - T1 pour lancer le test 1 et T2 pour lancer le test 2.
   // - TRUE/FALSE, qui permet d'activer ou non le test.
   // - NEUTRE, permet de mettre le servo au neutre.
+  // - I permet de définir l'interval (vitesse de rotation du servo).
   String command = "";
   if (Serial.available() > 0) {
     command = Serial.readString();
