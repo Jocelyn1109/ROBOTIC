@@ -50,7 +50,15 @@ bool initBreakout = false;
 bool start_test = false;
 float degrees_ = 0.0;
 uint8_t num_servo = 0;
-int interval = 1;
+int interval = 10;
+
+// servo 1 currentServosDegrees[0]
+// servo 2 currentServosDegrees[1]
+// servo 3 currentServosDegrees[2]
+// servo 4 currentServosDegrees[3]
+// servo 5 currentServosDegrees[4]
+// servo 6 currentServosDegrees[5]
+float curentServosDegrees[6] = {};
 
 void setup() {
 
@@ -68,6 +76,7 @@ void setup() {
 
     pwm.setOscillatorFrequency(27000000);
 
+    delay(2000);
     initArm();
 
   } else {
@@ -97,7 +106,28 @@ void loop() {
   extractEntryData(command);
 
   if (start_test && initBreakout) {
-    move(num_servo, degrees_);
+
+    switch (num_servo) {
+      case 1:
+        move_servo_1(degrees_);
+        break;
+      case 2:
+        move_servo_2(degrees_);
+        break;
+      case 3:
+        move_servo_3(degrees_);
+        break;
+      case 4:
+        move_servo_4(degrees_);
+        break;
+      case 5:
+        move_servo_5(degrees_);
+        break;
+      case 6:
+        move_servo_6(degrees_);
+        break;
+      default: break;
+    }
     start_test = false;
   }
 }
@@ -144,7 +174,7 @@ void extractEntryData(String command) {
 
 /**
   Permet d'initialiser la position du bras.
-  Le servo 1 doit avoir un débatement de 20°<-->250°, un neutre à 133° et une position initiale de 133°.
+  Le servo 1 doit avoir un débatement de 66°<-->200°, un neutre à 133° et une position initiale de 133°.
   Le servo 2 doit avoir un débatement de 125°<-->270°, un neutre à 145° et une position initiale de 270°.
   Le servo 3 doit avoir un débatement de 40°<-->220°, un neutre à 133° et une position initiale de 40°.
   Le servo 4 doit avoir un débatement de 133°<-->270°, un neutre à 133° et une position initiale de 270°.
@@ -153,23 +183,42 @@ void extractEntryData(String command) {
 */
 void initArm() {
 
+  pwm.setPWM(SERVO_1, 0, 0);
+  pwm.setPWM(SERVO_2, 0, 0);
+  pwm.setPWM(SERVO_3, 0, 0);
+  pwm.setPWM(SERVO_4, 0, 0);
+  pwm.setPWM(SERVO_5, 0, 0);
+  pwm.setPWM(SERVO_6, 0, 0);
+
   float pulseLen = map(133.0, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
   pwm.setPWM(SERVO_1, 0, pulseLen);
+  curentServosDegrees[0] = 133.0;
+  delay(200);
 
   pulseLen = map(270.0, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
   pwm.setPWM(SERVO_2, 0, pulseLen);
+  curentServosDegrees[1] = 270.0;
+  delay(200);
 
   pulseLen = map(40.0, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
   pwm.setPWM(SERVO_3, 0, pulseLen);
+  curentServosDegrees[2] = 40.0;
+  delay(200);
 
   pulseLen = map(270.0, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
   pwm.setPWM(SERVO_4, 0, pulseLen);
+  curentServosDegrees[3] = 270.0;
+  delay(200);
 
   pulseLen = map(125.0, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
   pwm.setPWM(SERVO_5, 0, pulseLen);
+  curentServosDegrees[4] = 125.0;
+  delay(200);
 
   pulseLen = map(120.0, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
   pwm.setPWM(SERVO_6, 0, pulseLen);
+  curentServosDegrees[5] = 120.0;
+  delay(200);
 }
 
 /**
@@ -183,6 +232,11 @@ void move(uint8_t numServo, float degrees) {
 
   uint16_t currentPWM = pwm.getPWM(numServo, true);
   float currentDegrees = map(currentPWM, SERVOMIN_DS3225, SERVOMAX_DS3225, 0.0, 270.0);
+
+  Serial.print(F("currentDegrees = "));
+  Serial.println(currentDegrees);
+  Serial.print(F("degrees = "));
+  Serial.println(degrees);
 
   if (degrees > currentDegrees) {
     // sens +
@@ -199,4 +253,118 @@ void move(uint8_t numServo, float degrees) {
       delay(interval);
     }
   }
+}
+
+/**
+  Mouvement servo 1
+*/
+void move_servo_1(float degrees) {
+
+  Serial.println(F("Mouvement servo 1\n"));
+
+  // limite servo 1 [66;200]
+  if (degrees >= 66 && degrees <= 200) {
+
+    float currentDegrees = curentServosDegrees[0];
+    if (degrees > currentDegrees) {
+      // sens +
+      for (float deg = currentDegrees; deg <= degrees; deg++) {
+        float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+        pwm.setPWM(1, 0, pulseLen);
+        curentServosDegrees[0] = deg;
+        delay(interval);
+      }
+    } else if (degrees < currentDegrees) {
+      // sens -
+      for (float deg = currentDegrees; deg >= degrees; deg--) {
+        float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+        pwm.setPWM(1, 0, pulseLen);
+        curentServosDegrees[0] = deg;
+        delay(interval);
+      }
+    }
+  }
+}
+
+/**
+  Mouvement servo 2
+*/
+void move_servo_2(float degrees) {
+
+  Serial.println(F("Mouvement servo 2\n"));
+
+  // limite servo 2 [125;270]
+  if (degrees >= 125 && degrees <= 270) {
+
+    float currentDegrees = curentServosDegrees[1];
+    if (degrees > currentDegrees) {
+      // sens +
+      for (float deg = currentDegrees; deg <= degrees; deg++) {
+        float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+        pwm.setPWM(2, 0, pulseLen);
+        curentServosDegrees[1] = deg;
+        delay(interval);
+      }
+    } else if (degrees < currentDegrees) {
+      // sens -
+      for (float deg = currentDegrees; deg >= degrees; deg--) {
+        float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+        pwm.setPWM(2, 0, pulseLen);
+        curentServosDegrees[1] = deg;
+        if (deg <= 230.0) {
+          move_servo_3(80.0);
+          //float pulseLen = map(80.0, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+          //pwm.setPWM(3, 0, pulseLen);
+          //curentServosDegrees[2] = 80.0;
+        }
+        delay(interval);
+      }
+    }
+  }
+}
+
+/**
+  Mouvement servo 3
+*/
+void move_servo_3(float degrees) {
+
+  Serial.println(F("Mouvement servo 3\n"));
+
+  // limite servo 3 [40;220]
+  if (degrees >= 40 && degrees <= 220) {
+
+    float currentDegrees = curentServosDegrees[2];
+    if (degrees > currentDegrees) {
+      // sens +
+      for (float deg = currentDegrees; deg <= degrees; deg++) {
+        float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+        pwm.setPWM(3, 0, pulseLen);
+        curentServosDegrees[2] = deg;
+        // empêche la basculement vers l'arrière à cause du poids
+        // l'angle du servo 3 ne doit pas être inférieur à 80 degrés
+        if (curentServosDegrees[1] >= 270 && curentServosDegrees[1] <= 250 && deg >= 80) {
+          return;
+        }
+        delay(interval);
+      }
+    } else if (degrees < currentDegrees) {
+      // sens -
+      for (float deg = currentDegrees; deg >= degrees; deg--) {
+        float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+        pwm.setPWM(3, 0, pulseLen);
+        curentServosDegrees[2] = deg;
+        delay(interval);
+      }
+    }
+  }
+}
+
+void move_servo_4(float degrees) {
+  Serial.println(F("Mouvement servo 4\n"));
+}
+void move_servo_5(float degrees) {
+  Serial.println(F("Mouvement servo 5\n"));
+}
+void move_servo_6(float degrees) {
+  Serial.println(F("Mouvement servo 6\n"));
 }
