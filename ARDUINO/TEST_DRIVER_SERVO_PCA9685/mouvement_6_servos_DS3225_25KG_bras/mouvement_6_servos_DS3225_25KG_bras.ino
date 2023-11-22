@@ -33,6 +33,7 @@
 */
 
 #include <Adafruit_PWMServoDriver.h>
+#include <math.h>
 
 #define SERVO_1 1
 #define SERVO_2 2
@@ -50,7 +51,7 @@ bool initBreakout = false;
 bool start_test = false;
 float degrees_ = 0.0;
 uint8_t num_servo = 0;
-int interval = 10;
+int interval = 3;
 
 // servo 1 currentServosDegrees[0]
 // servo 2 currentServosDegrees[1]
@@ -154,6 +155,10 @@ void extractEntryData(String command) {
     num_servo = SERVO_6;
   } else if (command == "INIT") {
     initArm();
+  } else if (command == "SLEEP") {
+    pwm.sleep();
+  } else if (command == "WAKEUP") {
+    pwm.wakeup();
   } else if (command.charAt(0) == 'D') {
     String degreesStr = command.substring(2, command.length());
     Serial.print(F("Valeur des degrés: "));
@@ -193,32 +198,32 @@ void initArm() {
   float pulseLen = map(133.0, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
   pwm.setPWM(SERVO_1, 0, pulseLen);
   curentServosDegrees[0] = 133.0;
-  delay(200);
+  delay(100);
 
   pulseLen = map(270.0, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
   pwm.setPWM(SERVO_2, 0, pulseLen);
   curentServosDegrees[1] = 270.0;
-  delay(200);
+  delay(100);
 
   pulseLen = map(40.0, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
   pwm.setPWM(SERVO_3, 0, pulseLen);
   curentServosDegrees[2] = 40.0;
-  delay(200);
+  delay(100);
 
   pulseLen = map(270.0, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
   pwm.setPWM(SERVO_4, 0, pulseLen);
   curentServosDegrees[3] = 270.0;
-  delay(200);
+  delay(100);
 
   pulseLen = map(125.0, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
   pwm.setPWM(SERVO_5, 0, pulseLen);
   curentServosDegrees[4] = 125.0;
-  delay(200);
+  delay(100);
 
   pulseLen = map(120.0, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
   pwm.setPWM(SERVO_6, 0, pulseLen);
   curentServosDegrees[5] = 120.0;
-  delay(200);
+  delay(100);
 }
 
 /**
@@ -293,6 +298,14 @@ void move_servo_2(float degrees) {
 
   Serial.println(F("Mouvement servo 2\n"));
 
+  float incr = calculIncrement(230.0, degrees, curentServosDegrees[2], 80.0);
+
+  Serial.print(F("\nValeur de l'incrément: "));
+  Serial.println(incr);
+  Serial.print(F("Valeur initiale servo 3: "));
+  Serial.println(curentServosDegrees[2]);
+
+
   // limite servo 2 [125;270]
   if (degrees >= 125 && degrees <= 270) {
 
@@ -311,16 +324,19 @@ void move_servo_2(float degrees) {
         float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
         pwm.setPWM(2, 0, pulseLen);
         curentServosDegrees[1] = deg;
-        if (deg <= 230.0) {
-          move_servo_3(80.0);
-          //float pulseLen = map(80.0, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
-          //pwm.setPWM(3, 0, pulseLen);
-          //curentServosDegrees[2] = 80.0;
+        if (deg <= 230.0 && curentServosDegrees[2] < 80.0) {
+          float degreesS3 = curentServosDegrees[2] + incr;
+          float pulseLen = map(degreesS3, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+          pwm.setPWM(3, 0, pulseLen);
+          curentServosDegrees[2] = degreesS3;
         }
         delay(interval);
       }
     }
   }
+
+  Serial.print("Degrés servo 3 = ");
+  Serial.println(curentServosDegrees[2]);
 }
 
 /**
@@ -341,8 +357,8 @@ void move_servo_3(float degrees) {
         pwm.setPWM(3, 0, pulseLen);
         curentServosDegrees[2] = deg;
         // empêche la basculement vers l'arrière à cause du poids
-        // l'angle du servo 3 ne doit pas être inférieur à 80 degrés
-        if (curentServosDegrees[1] >= 270 && curentServosDegrees[1] <= 250 && deg >= 80) {
+        // l'angle du servo 3 ne doit pas être inférieur à 80 degrés lorsque le servo 2 est dans l'intervalle [250;270]
+        if (curentServosDegrees[1] >= 250 && curentServosDegrees[1] <= 270 && deg >= 80) {
           return;
         }
         delay(interval);
@@ -359,12 +375,109 @@ void move_servo_3(float degrees) {
   }
 }
 
+/**
+  Mouvement servo 4
+*/
 void move_servo_4(float degrees) {
+
   Serial.println(F("Mouvement servo 4\n"));
+
+  // limite servo 4 [133;270]
+  if (degrees >= 133 && degrees <= 270) {
+
+    float currentDegrees = curentServosDegrees[3];
+    if (degrees > currentDegrees) {
+      // sens +
+      for (float deg = currentDegrees; deg <= degrees; deg++) {
+        float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+        pwm.setPWM(4, 0, pulseLen);
+        curentServosDegrees[3] = deg;
+        delay(interval);
+      }
+    } else if (degrees < currentDegrees) {
+      // sens -
+      for (float deg = currentDegrees; deg >= degrees; deg--) {
+        float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+        pwm.setPWM(4, 0, pulseLen);
+        curentServosDegrees[3] = deg;
+        delay(interval);
+      }
+    }
+  }
 }
+
+/**
+  Mouvement servo 5
+*/
 void move_servo_5(float degrees) {
+
   Serial.println(F("Mouvement servo 5\n"));
+
+  // limite servo 5 [10;210]
+  if (degrees >= 10 && degrees <= 210) {
+
+    float currentDegrees = curentServosDegrees[4];
+    if (degrees > currentDegrees) {
+      // sens +
+      for (float deg = currentDegrees; deg <= degrees; deg++) {
+        float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+        pwm.setPWM(5, 0, pulseLen);
+        curentServosDegrees[4] = deg;
+        delay(interval);
+      }
+    } else if (degrees < currentDegrees) {
+      // sens -
+      for (float deg = currentDegrees; deg >= degrees; deg--) {
+        float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+        pwm.setPWM(5, 0, pulseLen);
+        curentServosDegrees[4] = deg;
+        delay(interval);
+      }
+    }
+  }
 }
+
+
+/**
+  Mouvement servo 6
+*/
 void move_servo_6(float degrees) {
+
   Serial.println(F("Mouvement servo 6\n"));
+
+  // limite servo 6 [120;220]
+  if (degrees >= 120 && degrees <= 220) {
+
+    float currentDegrees = curentServosDegrees[5];
+    if (degrees > currentDegrees) {
+      // sens +
+      for (float deg = currentDegrees; deg <= degrees; deg++) {
+        float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+        pwm.setPWM(6, 0, pulseLen);
+        curentServosDegrees[5] = deg;
+        delay(interval);
+      }
+    } else if (degrees < currentDegrees) {
+      // sens -
+      for (float deg = currentDegrees; deg >= degrees; deg--) {
+        float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
+        pwm.setPWM(6, 0, pulseLen);
+        curentServosDegrees[5] = deg;
+        delay(interval);
+      }
+    }
+  }
+}
+
+/**
+  Calcul de l'incrément
+*/
+float calculIncrement(float startFirstServo, float endFirstServo, float startSecondServo, float endSecondServo) {
+
+  float todoFirstServo = endFirstServo - startFirstServo;
+  if (endFirstServo < startFirstServo) {
+    todoFirstServo = todoFirstServo * -1;
+  }
+  float todoSecondServo = endSecondServo - startSecondServo;
+  return todoFirstServo / todoSecondServo;
 }
