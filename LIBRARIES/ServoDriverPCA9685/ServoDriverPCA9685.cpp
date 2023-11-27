@@ -6,10 +6,9 @@
  * @param addr address of the PCA9685 on the I2C bus.
  */
 ServoDriverPCA9685::ServoDriverPCA9685(const uint8_t addr, float frequence, uint32_t oscillatorFrequency) {
-    pwmPCA9685 = Adafruit_PWMServoDriver(addr);
+    addr_ = addr;
     frequence_ = frequence;
-    pwmPCA9685.setPWMFreq(frequence_);
-    pwmPCA9685.setOscillatorFrequency(oscillatorFrequency);
+    oscillatorFrequency_ = oscillatorFrequency;
 }
 
 /**
@@ -25,7 +24,31 @@ ServoDriverPCA9685::ServoDriverPCA9685(const ServoDriverPCA9685 &other) {
  * @return true if successful, otherwise false.
  */
 bool ServoDriverPCA9685::initDriver(uint8_t prescale) {
-    return pwmPCA9685.begin(prescale);
+
+    if (addr_ != 0x40) {
+        pwmPCA9685 = Adafruit_PWMServoDriver(addr_);
+    } else {
+        pwmPCA9685 = Adafruit_PWMServoDriver();
+    }
+
+    bool resInit = pwmPCA9685.begin(prescale);
+    if (resInit) {
+        pwmPCA9685.setPWMFreq(frequence_);
+        pwmPCA9685.setOscillatorFrequency(oscillatorFrequency_);
+    }
+    return resInit;
+}
+
+/**
+ * Sleep or wakeup the board.
+ * @param isSleep true for sleep and false for wakeup.
+ */
+void ServoDriverPCA9685::sleepWakeUp(bool isSleep) {
+    if (isSleep) {
+        pwmPCA9685.sleep();
+    } else {
+        pwmPCA9685.wakeup();
+    }
 }
 
 /**
@@ -40,9 +63,10 @@ bool ServoDriverPCA9685::initDriver(uint8_t prescale) {
 void ServoDriverPCA9685::setDegrees(const uint8_t numServo, long degrees, long maxDegree, long servoMin,
                                     long servoMax, bool is4096) {
     if (is4096) {
-        const uint16_t servoMin_4096 = convertePulseMicroSecondTo4096(servoMin);
-        const uint16_t servoMax_4096 = convertePulseMicroSecondTo4096(servoMax);
-        long pulseLen = map(degrees, 0, maxDegree, servoMin_4096, servoMax_4096);
+        //const uint16_t servoMin_4096 = convertePulseMicroSecondTo4096(servoMin);
+        //const uint16_t servoMax_4096 = convertePulseMicroSecondTo4096(servoMax);
+        //long pulseLen = map(degrees, 0, maxDegree, servoMin_4096, servoMax_4096);
+        long pulseLen = map(degrees, 0, maxDegree, servoMin, servoMax);
         pwmPCA9685.setPWM(numServo, 0, pulseLen);
     } else {
         long pulseLen = map(degrees, 0, maxDegree, servoMin, servoMax);
@@ -60,7 +84,7 @@ void ServoDriverPCA9685::setDegrees(const uint8_t numServo, long degrees, long m
  */
 float ServoDriverPCA9685::getCurrentDegrees(uint8_t servoNum, long maxDegree, long servoMin, long servoMax) {
 
-    if (servoNum >= 0 && servoNum <= 15) {
+    if (servoNum <= 15) {
         uint16_t currentPWM = pwmPCA9685.getPWM(servoNum, true);
         float currentDegrees = map(currentPWM, servoMin, servoMax, 0.0, maxDegree);
         return (float) currentDegrees;
@@ -78,7 +102,7 @@ float ServoDriverPCA9685::getCurrentDegrees(uint8_t servoNum, long maxDegree, lo
  */
 uint8_t ServoDriverPCA9685::setPWMOutput(int8_t servoNum, uint16_t on, uint16_t off) {
 
-    if (servoNum >= 0 && servoNum <= 15) {
+    if (servoNum <= 15) {
         pwmPCA9685.setPWM(servoNum, on, off);
         return 0;
     } else {
@@ -94,7 +118,7 @@ uint8_t ServoDriverPCA9685::setPWMOutput(int8_t servoNum, uint16_t on, uint16_t 
  */
 uint8_t ServoDriverPCA9685::writeMicroseconds(uint8_t servoNum, uint16_t Microseconds) {
 
-    if (servoNum >= 0 && servoNum <= 15) {
+    if (servoNum <= 15) {
         pwmPCA9685.writeMicroseconds(servoNum, Microseconds);
         return 0;
     } else {

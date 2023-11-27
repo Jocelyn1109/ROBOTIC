@@ -6,6 +6,7 @@
 #ifndef _SERVO_DRIVER_PCA9685_H_
 #define _SERVO_DRIVER_PCA9685_H_
 
+#include <stdint.h>
 #include "Adafruit_PWMServoDriver.h"
 
 class ServoDriverPCA9685 {
@@ -33,6 +34,12 @@ public:
      * @return true if successful, otherwise false.
      */
     bool initDriver(uint8_t prescale = 0);
+
+    /**
+     * Sleep or wakeup the board.
+     * @param isSleep true for sleep and false for wakeup.
+     */
+    void sleepWakeUp(bool isSleep);
 
     /**
      * Set degrees
@@ -75,9 +82,12 @@ public:
 private:
     Adafruit_PWMServoDriver pwmPCA9685;
     float frequence_;
+    uint8_t addr_;
+    uint32_t oscillatorFrequency_;
 
     /***
-     * Converte pulse in microseconds to the corresponding pulse value width on 4096 (2^12, 12bits).
+     * Converte pulse in microseconds
+     * to the corresponding pulse value width on 4096 (2^12, 12bits).
      * @param pulse pulse value in microseconds.
      * @return the corresponding pulse value width on 4096 (2^12, 12bits).
      */

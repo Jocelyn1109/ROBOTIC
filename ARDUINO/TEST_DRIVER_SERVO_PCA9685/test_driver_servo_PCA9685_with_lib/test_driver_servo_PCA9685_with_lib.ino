@@ -6,6 +6,7 @@
 
 */
 
+#include "Adafruit_PWMServoDriver.h"
 #include "ServoDriverPCA9685.h"
 
 #define SERVO_1 1
@@ -37,7 +38,6 @@ ServoDriverPCA9685 servoDriverPCA9685(0x40, 50.0, 27000000);
 bool initBreakout = false;
 
 void setup() {
-
   Serial.begin(19200);
 
   initBreakout = servoDriverPCA9685.initDriver();
@@ -70,6 +70,28 @@ void loop() {
   extractEntryData(command);
 
   if (start_test && initBreakout) {
+    switch (num_servo) {
+      case 1:
+        move_servo_1(degrees_);
+        break;
+      case 2:
+        move_servo_2(degrees_);
+        break;
+      case 3:
+        move_servo_3(degrees_);
+        break;
+      case 4:
+        move_servo_4(degrees_);
+        break;
+      case 5:
+        move_servo_5(degrees_);
+        break;
+      case 6:
+        move_servo_6(degrees_);
+        break;
+      default: break;
+    }
+    start_test = false;
   }
 }
 
@@ -95,9 +117,9 @@ void extractEntryData(String command) {
   } else if (command == "INIT") {
     initArm();
   } else if (command == "SLEEP") {
-    //TODO
+    servoDriverPCA9685.sleepWakeUp(true);
   } else if (command == "WAKEUP") {
-    //TODO
+    servoDriverPCA9685.sleepWakeUp(false);
   } else if (command.charAt(0) == 'D') {
     String degreesStr = command.substring(2, command.length());
     Serial.print(F("Valeur des degrés: "));
@@ -156,4 +178,68 @@ void initArm() {
   servoDriverPCA9685.setDegrees(SERVO_6, 120.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
   curentServosDegrees[5] = servoDriverPCA9685.getCurrentDegrees(SERVO_6, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
   delay(100);
+}
+
+/**
+  Mouvement servo 1
+*/
+void move_servo_1(float degrees) {
+
+  Serial.println(F("Mouvement servo 1\n"));
+
+  // limite servo 1 [66;200]
+  if (degrees >= 66 && degrees <= 200) {
+
+    float currentDegrees = servoDriverPCA9685.getCurrentDegrees(SERVO_1, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    if (degrees > currentDegrees) {
+      // sens +
+      for (float deg = currentDegrees; deg <= degrees; deg++) {
+        servoDriverPCA9685.setDegrees(SERVO_1, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+        delay(interval);
+      }
+    } else if (degrees < currentDegrees) {
+      // sens -
+      for (float deg = currentDegrees; deg >= degrees; deg--) {
+        servoDriverPCA9685.setDegrees(SERVO_1, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+        delay(interval);
+      }
+    }
+  }
+
+  curentServosDegrees[0] = servoDriverPCA9685.getCurrentDegrees(SERVO_1, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+}
+
+/**
+  Mouvement servo 2
+*/
+void move_servo_2(float degrees) {
+  Serial.println(F("Mouvement servo 2\n"));
+}
+
+/**
+  Mouvement servo 3
+*/
+void move_servo_3(float degrees) {
+  Serial.println(F("Mouvement servo 3\n"));
+}
+
+/**
+  Mouvement servo 4
+*/
+void move_servo_4(float degrees) {
+  Serial.println(F("Mouvement servo 4\n"));
+}
+
+/**
+  Mouvement servo 5
+*/
+void move_servo_5(float degrees) {
+  Serial.println(F("Mouvement servo 5\n"));
+}
+
+/**
+  Mouvement servo 6
+*/
+void move_servo_6(float degrees) {
+  Serial.println(F("Mouvement servo 6\n"));
 }
