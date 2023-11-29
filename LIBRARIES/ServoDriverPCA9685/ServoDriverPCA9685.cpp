@@ -5,10 +5,7 @@
  * Constructor
  * @param addr address of the PCA9685 on the I2C bus.
  */
-ServoDriverPCA9685::ServoDriverPCA9685(const uint8_t addr, float frequence, uint32_t oscillatorFrequency) {
-    addr_ = addr;
-    frequence_ = frequence;
-    oscillatorFrequency_ = oscillatorFrequency;
+ServoDriverPCA9685::ServoDriverPCA9685(const uint8_t addr, float frequence, uint32_t oscillatorFrequency): addr_(addr), frequence_(frequence), oscillatorFrequency_(oscillatorFrequency) {
 }
 
 /**
@@ -63,14 +60,13 @@ void ServoDriverPCA9685::sleepWakeUp(bool isSleep) {
 void ServoDriverPCA9685::setDegrees(const uint8_t numServo, long degrees, long maxDegree, long servoMin,
                                     long servoMax, bool is4096) {
     if (is4096) {
-        //const uint16_t servoMin_4096 = convertePulseMicroSecondTo4096(servoMin);
-        //const uint16_t servoMax_4096 = convertePulseMicroSecondTo4096(servoMax);
-        //long pulseLen = map(degrees, 0, maxDegree, servoMin_4096, servoMax_4096);
         long pulseLen = map(degrees, 0, maxDegree, servoMin, servoMax);
         pwmPCA9685.setPWM(numServo, 0, pulseLen);
     } else {
-        long pulseLen = map(degrees, 0, maxDegree, servoMin, servoMax);
-        pwmPCA9685.writeMicroseconds(numServo, pulseLen);
+        const uint16_t servoMin_4096 = convertePulseMicroSecondTo4096(servoMin);
+        const uint16_t servoMax_4096 = convertePulseMicroSecondTo4096(servoMax);
+        long pulseLen = map(degrees, 0, maxDegree, servoMin_4096, servoMax_4096);
+        pwmPCA9685.setPWM(numServo, 0, pulseLen);
     }
 }
 

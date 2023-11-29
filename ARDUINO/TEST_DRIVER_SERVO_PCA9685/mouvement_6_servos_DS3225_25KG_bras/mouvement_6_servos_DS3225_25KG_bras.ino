@@ -275,7 +275,7 @@ void move_servo_1(float degrees) {
       // sens +
       for (float deg = currentDegrees; deg <= degrees; deg++) {
         float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
-        pwm.setPWM(1, 0, pulseLen);
+        pwm.setPWM(SERVO_1, 0, pulseLen);
         curentServosDegrees[0] = deg;
         delay(interval);
       }
@@ -283,7 +283,7 @@ void move_servo_1(float degrees) {
       // sens -
       for (float deg = currentDegrees; deg >= degrees; deg--) {
         float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
-        pwm.setPWM(1, 0, pulseLen);
+        pwm.setPWM(SERVO_1, 0, pulseLen);
         curentServosDegrees[0] = deg;
         delay(interval);
       }
@@ -314,7 +314,7 @@ void move_servo_2(float degrees) {
       // sens +
       for (float deg = currentDegrees; deg <= degrees; deg++) {
         float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
-        pwm.setPWM(2, 0, pulseLen);
+        pwm.setPWM(SERVO_2, 0, pulseLen);
         curentServosDegrees[1] = deg;
         delay(interval);
       }
@@ -322,12 +322,12 @@ void move_servo_2(float degrees) {
       // sens -
       for (float deg = currentDegrees; deg >= degrees; deg--) {
         float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
-        pwm.setPWM(2, 0, pulseLen);
+        pwm.setPWM(SERVO_2, 0, pulseLen);
         curentServosDegrees[1] = deg;
         if (deg <= 230.0 && curentServosDegrees[2] < 80.0) {
           float degreesS3 = curentServosDegrees[2] + incr;
           float pulseLen = map(degreesS3, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
-          pwm.setPWM(3, 0, pulseLen);
+          pwm.setPWM(SERVO_3, 0, pulseLen);
           curentServosDegrees[2] = degreesS3;
         }
         delay(interval);
@@ -354,7 +354,7 @@ void move_servo_3(float degrees) {
       // sens +
       for (float deg = currentDegrees; deg <= degrees; deg++) {
         float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
-        pwm.setPWM(3, 0, pulseLen);
+        pwm.setPWM(SERVO_3, 0, pulseLen);
         curentServosDegrees[2] = deg;
         // empêche la basculement vers l'arrière à cause du poids
         // l'angle du servo 3 ne doit pas être inférieur à 80 degrés lorsque le servo 2 est dans l'intervalle [250;270]
@@ -367,7 +367,7 @@ void move_servo_3(float degrees) {
       // sens -
       for (float deg = currentDegrees; deg >= degrees; deg--) {
         float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
-        pwm.setPWM(3, 0, pulseLen);
+        pwm.setPWM(SERVO_3, 0, pulseLen);
         curentServosDegrees[2] = deg;
         delay(interval);
       }
@@ -390,7 +390,7 @@ void move_servo_4(float degrees) {
       // sens +
       for (float deg = currentDegrees; deg <= degrees; deg++) {
         float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
-        pwm.setPWM(4, 0, pulseLen);
+        pwm.setPWM(SERVO_4, 0, pulseLen);
         curentServosDegrees[3] = deg;
         delay(interval);
       }
@@ -398,7 +398,7 @@ void move_servo_4(float degrees) {
       // sens -
       for (float deg = currentDegrees; deg >= degrees; deg--) {
         float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
-        pwm.setPWM(4, 0, pulseLen);
+        pwm.setPWM(SERVO_4, 0, pulseLen);
         curentServosDegrees[3] = deg;
         delay(interval);
       }
@@ -421,7 +421,7 @@ void move_servo_5(float degrees) {
       // sens +
       for (float deg = currentDegrees; deg <= degrees; deg++) {
         float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
-        pwm.setPWM(5, 0, pulseLen);
+        pwm.setPWM(SERVO_5, 0, pulseLen);
         curentServosDegrees[4] = deg;
         delay(interval);
       }
@@ -429,7 +429,7 @@ void move_servo_5(float degrees) {
       // sens -
       for (float deg = currentDegrees; deg >= degrees; deg--) {
         float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
-        pwm.setPWM(5, 0, pulseLen);
+        pwm.setPWM(SERVO_5, 0, pulseLen);
         curentServosDegrees[4] = deg;
         delay(interval);
       }
@@ -453,7 +453,7 @@ void move_servo_6(float degrees) {
       // sens +
       for (float deg = currentDegrees; deg <= degrees; deg++) {
         float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
-        pwm.setPWM(6, 0, pulseLen);
+        pwm.setPWM(SERVO_6, 0, pulseLen);
         curentServosDegrees[5] = deg;
         delay(interval);
       }
@@ -461,7 +461,7 @@ void move_servo_6(float degrees) {
       // sens -
       for (float deg = currentDegrees; deg >= degrees; deg--) {
         float pulseLen = map(deg, 0.0, 270.0, SERVOMIN_DS3225, SERVOMAX_DS3225);
-        pwm.setPWM(6, 0, pulseLen);
+        pwm.setPWM(SERVO_6, 0, pulseLen);
         curentServosDegrees[5] = deg;
         delay(interval);
       }
