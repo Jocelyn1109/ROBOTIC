@@ -49,7 +49,7 @@ void ServoDriverPCA9685::sleepWakeUp(bool isSleep) {
 }
 
 /**
- * Set degrees
+ * Set degrees with using PWM.
  * @param numServo servo number.
  * @param degrees degrees value.
  * @param maxDegree the maximum degree value of the servo (ex: 180°, 360°...).
@@ -57,8 +57,13 @@ void ServoDriverPCA9685::sleepWakeUp(bool isSleep) {
  * @param servoMax the corresponding maximum pulse width on 4096 (2^12, 12bits) or in microseconds.
  * @param is4096 is true servoMin and servoMax must be on 4096 (2^12, 12bits) otherwise in microseconds.
  */
-void ServoDriverPCA9685::setDegrees(const uint8_t numServo, long degrees, long maxDegree, long servoMin,
-                                    long servoMax, bool is4096) {
+void ServoDriverPCA9685::setDegreesWithPWM(uint8_t numServo, long degrees, long maxDegree, long servoMin,
+                                           long servoMax, bool is4096) {
+
+    if(numServo > 15){
+        return;
+    }
+
     if (is4096) {
         long pulseLen = map(degrees, 0, maxDegree, servoMin, servoMax);
         pwmPCA9685.setPWM(numServo, 0, pulseLen);
@@ -71,20 +76,57 @@ void ServoDriverPCA9685::setDegrees(const uint8_t numServo, long degrees, long m
 }
 
 /**
- * Get the current degrees of the servo.
+ * Set degrees with using microseconds
+ * @param numServo servo number.
+ * @param degrees degrees value.
+ * @param maxDegree the maximum degree value of the servo (ex: 180°, 360°...).
+ * @param servoMin the corresponding minimum pulse width in microseconds.
+ * @param servoMax the corresponding maximum pulse width in microseconds.
+ */
+void ServoDriverPCA9685::setDegreesWithMicroseconds(uint8_t numServo, long degrees, long maxDegree, long servoMin, long servoMax) {
+
+    if(numServo <= 15){
+        long pulseLen = map(degrees, 0, maxDegree, servoMin, servoMax);
+        pwmPCA9685.writeMicroseconds(numServo,pulseLen);
+    }
+}
+
+/**
+ * Get the current degrees of the servo with using PWM.
  * @param servoNum servo number.
  * @param maxDegree the maximum degree value of the servo (ex: 180°, 360°...).
  * @param servoMin the corresponding minimum pulse width on 4096 (2^12, 12bits).
  * @param servoMax the corresponding maximum pulse width on 4096 (2^12, 12bits).
  * @return the current degrees (position of the servo) otherwise -1;
  */
-float ServoDriverPCA9685::getCurrentDegrees(uint8_t servoNum, long maxDegree, long servoMin, long servoMax) {
+float ServoDriverPCA9685::getCurrentDegreesWithPWM(uint8_t servoNum, long maxDegree, long servoMin, long servoMax) {
 
     if (servoNum <= 15) {
         uint16_t currentPWM = pwmPCA9685.getPWM(servoNum, true);
         float currentDegrees = map(currentPWM, servoMin, servoMax, 0.0, maxDegree);
         return (float) currentDegrees;
     } else {
+        return -1;
+    }
+}
+
+/**
+ * Get the current degrees of the servo with using microseconds.
+ * @param servoNum servo number.
+ * @param maxDegree the maximum degree value of the servo (ex: 180°, 360°...).
+ * @param servoMin the corresponding minimum pulse width in microseconds.
+ * @param servoMax the corresponding maximum pulse width in microseconds.
+ * @return the current degrees (position of the servo) otherwise -1;
+ */
+float ServoDriverPCA9685::getCurrentDegreesWithMicroseconds(uint8_t servoNum, long maxDegree, long servoMin, long servoMax) {
+
+    if (servoNum <= 15) {
+        uint16_t currentPWM = pwmPCA9685.getPWM(servoNum, true);
+        const uint16_t servoMin_4096 = convertePulseMicroSecondTo4096(servoMin);
+        const uint16_t servoMax_4096 = convertePulseMicroSecondTo4096(servoMax);
+        float currentDegrees = map(currentPWM, servoMin_4096, servoMax_4096, 0.0, maxDegree);
+        return (float) currentDegrees;
+    }else{
         return -1;
     }
 }

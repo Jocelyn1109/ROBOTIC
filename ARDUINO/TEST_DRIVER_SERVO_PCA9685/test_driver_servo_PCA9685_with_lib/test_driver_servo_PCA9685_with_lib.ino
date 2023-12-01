@@ -33,8 +33,9 @@ bool start_test = false;
 float degrees_ = 0.0;
 uint8_t num_servo = 0;
 int interval = 3;
+float frequence = 60.0;
 
-ServoDriverPCA9685 servoDriverPCA9685(0x40, 60.0, 27000000);
+ServoDriverPCA9685 servoDriverPCA9685(0x40, frequence, 27000000);
 bool initBreakout = false;
 
 void setup() {
@@ -114,6 +115,10 @@ void extractEntryData(String command) {
     num_servo = SERVO_5;
   } else if (command == "S6") {
     num_servo = SERVO_6;
+  } else if (command == "F1") {
+    functionTestMicrosecond_1();
+  } else if (command == "F2") {
+    functionTestMicrosecond_2();
   } else if (command == "INIT") {
     initArm();
   } else if (command == "SLEEP") {
@@ -148,28 +153,28 @@ void extractEntryData(String command) {
 */
 void initArm() {
 
-  servoDriverPCA9685.setDegrees(SERVO_1, 133.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
-  curentServosDegrees[0] = servoDriverPCA9685.getCurrentDegrees(SERVO_1, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  servoDriverPCA9685.setDegreesWithPWM(SERVO_1, 133.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+  curentServosDegrees[0] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_1, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
   delay(100);
 
-  servoDriverPCA9685.setDegrees(SERVO_2, 270.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
-  curentServosDegrees[1] = servoDriverPCA9685.getCurrentDegrees(SERVO_2, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  servoDriverPCA9685.setDegreesWithPWM(SERVO_2, 270.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+  curentServosDegrees[1] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_2, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
   delay(100);
 
-  servoDriverPCA9685.setDegrees(SERVO_3, 40.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
-  curentServosDegrees[2] = servoDriverPCA9685.getCurrentDegrees(SERVO_3, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  servoDriverPCA9685.setDegreesWithPWM(SERVO_3, 40.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+  curentServosDegrees[2] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_3, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
   delay(100);
 
-  servoDriverPCA9685.setDegrees(SERVO_4, 270.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
-  curentServosDegrees[3] = servoDriverPCA9685.getCurrentDegrees(SERVO_4, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  servoDriverPCA9685.setDegreesWithPWM(SERVO_4, 270.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+  curentServosDegrees[3] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_4, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
   delay(100);
 
-  servoDriverPCA9685.setDegrees(SERVO_5, 125.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
-  curentServosDegrees[4] = servoDriverPCA9685.getCurrentDegrees(SERVO_5, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  servoDriverPCA9685.setDegreesWithPWM(SERVO_5, 125.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+  curentServosDegrees[4] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_5, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
   delay(100);
 
-  servoDriverPCA9685.setDegrees(SERVO_6, 120.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
-  curentServosDegrees[5] = servoDriverPCA9685.getCurrentDegrees(SERVO_6, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  servoDriverPCA9685.setDegreesWithPWM(SERVO_6, 120.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+  curentServosDegrees[5] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_6, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
   delay(100);
 }
 
@@ -183,21 +188,21 @@ void move_servo_1(float degrees) {
   // limite servo 1 [66;200]
   if (degrees >= 66 && degrees <= 200) {
 
-    float currentDegrees = servoDriverPCA9685.getCurrentDegrees(SERVO_1, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    float currentDegrees = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_1, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
     if (degrees > currentDegrees) {
       // sens +
       for (float deg = currentDegrees; deg <= degrees; deg++) {
-        servoDriverPCA9685.setDegrees(SERVO_1, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+        servoDriverPCA9685.setDegreesWithPWM(SERVO_1, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
         delay(interval);
       }
     } else if (degrees < currentDegrees) {
       // sens -
       for (float deg = currentDegrees; deg >= degrees; deg--) {
-        servoDriverPCA9685.setDegrees(SERVO_1, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+        servoDriverPCA9685.setDegreesWithPWM(SERVO_1, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
         delay(interval);
       }
     }
-    curentServosDegrees[0] = servoDriverPCA9685.getCurrentDegrees(SERVO_1, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    curentServosDegrees[0] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_1, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
   } else {
     Serial.println(F("Servo 1: hors limite\n"));
   }
@@ -215,26 +220,26 @@ void move_servo_2(float degrees) {
   // limite servo 2 [125;270]
   if (degrees >= 125 && degrees <= 270) {
 
-    float currentDegrees = servoDriverPCA9685.getCurrentDegrees(SERVO_2, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    float currentDegrees = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_2, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
     if (degrees > currentDegrees) {
       // sens +
       for (float deg = currentDegrees; deg <= degrees; deg++) {
-        servoDriverPCA9685.setDegrees(SERVO_2, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+        servoDriverPCA9685.setDegreesWithPWM(SERVO_2, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
         delay(interval);
       }
     } else if (degrees < currentDegrees) {
       // sens -
       for (float deg = currentDegrees; deg >= degrees; deg--) {
-        servoDriverPCA9685.setDegrees(SERVO_2, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+        servoDriverPCA9685.setDegreesWithPWM(SERVO_2, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
         if (deg <= 230.0 && curentServosDegrees[2] < 80.0) {
           float degreesS3 = curentServosDegrees[2] + incr;
-          servoDriverPCA9685.setDegrees(SERVO_3, degreesS3, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+          servoDriverPCA9685.setDegreesWithPWM(SERVO_3, degreesS3, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
           curentServosDegrees[2] = degreesS3;
         }
         delay(interval);
       }
     }
-    curentServosDegrees[1] = servoDriverPCA9685.getCurrentDegrees(SERVO_2, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    curentServosDegrees[1] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_2, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
   } else {
     Serial.println(F("Servo 2: hors limite\n"));
   }
@@ -250,11 +255,11 @@ void move_servo_3(float degrees) {
   // limite servo 3 [40;220]
   if (degrees >= 40 && degrees <= 220) {
 
-    float currentDegrees = servoDriverPCA9685.getCurrentDegrees(SERVO_3, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    float currentDegrees = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_3, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
     if (degrees > currentDegrees) {
       // sens +
       for (float deg = currentDegrees; deg <= degrees; deg++) {
-        servoDriverPCA9685.setDegrees(SERVO_3, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+        servoDriverPCA9685.setDegreesWithPWM(SERVO_3, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
         // empêche la basculement vers l'arrière à cause du poids
         // l'angle du servo 3 ne doit pas être inférieur à 80 degrés lorsque le servo 2 est dans l'intervalle [250;270]
         if (curentServosDegrees[1] >= 250 && curentServosDegrees[1] <= 270 && deg >= 80) {
@@ -265,11 +270,11 @@ void move_servo_3(float degrees) {
     } else if (degrees < currentDegrees) {
       // sens -
       for (float deg = currentDegrees; deg >= degrees; deg--) {
-        servoDriverPCA9685.setDegrees(SERVO_3, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+        servoDriverPCA9685.setDegreesWithPWM(SERVO_3, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
         delay(interval);
       }
     }
-    curentServosDegrees[2] = servoDriverPCA9685.getCurrentDegrees(SERVO_3, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    curentServosDegrees[2] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_3, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
   } else {
     Serial.println(F("Servo 3: hors limite\n"));
   }
@@ -285,21 +290,21 @@ void move_servo_4(float degrees) {
   // limite servo 4 [133;270]
   if (degrees >= 133 && degrees <= 270) {
 
-    float currentDegrees = servoDriverPCA9685.getCurrentDegrees(SERVO_4, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    float currentDegrees = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_4, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
     if (degrees > currentDegrees) {
       // sens +
       for (float deg = currentDegrees; deg <= degrees; deg++) {
-        servoDriverPCA9685.setDegrees(SERVO_4, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+        servoDriverPCA9685.setDegreesWithPWM(SERVO_4, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
         delay(interval);
       }
     } else if (degrees < currentDegrees) {
       // sens -
       for (float deg = currentDegrees; deg >= degrees; deg--) {
-        servoDriverPCA9685.setDegrees(SERVO_4, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+        servoDriverPCA9685.setDegreesWithPWM(SERVO_4, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
         delay(interval);
       }
     }
-    curentServosDegrees[3] = servoDriverPCA9685.getCurrentDegrees(SERVO_4, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    curentServosDegrees[3] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_4, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
   } else {
     Serial.println(F("Servo 4: hors limite\n"));
   }
@@ -315,21 +320,21 @@ void move_servo_5(float degrees) {
   // limite servo 5 [10;210]
   if (degrees >= 10 && degrees <= 210) {
 
-    float currentDegrees = servoDriverPCA9685.getCurrentDegrees(SERVO_5, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    float currentDegrees = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_5, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
     if (degrees > currentDegrees) {
       // sens +
       for (float deg = currentDegrees; deg <= degrees; deg++) {
-        servoDriverPCA9685.setDegrees(SERVO_5, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+        servoDriverPCA9685.setDegreesWithPWM(SERVO_5, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
         delay(interval);
       }
     } else if (degrees < currentDegrees) {
       // sens -
       for (float deg = currentDegrees; deg >= degrees; deg--) {
-        servoDriverPCA9685.setDegrees(SERVO_5, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+        servoDriverPCA9685.setDegreesWithPWM(SERVO_5, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
         delay(interval);
       }
     }
-    curentServosDegrees[4] = servoDriverPCA9685.getCurrentDegrees(SERVO_5, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    curentServosDegrees[4] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_5, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
   } else {
     Serial.println(F("Servo 5: hors limite\n"));
   }
@@ -345,24 +350,43 @@ void move_servo_6(float degrees) {
   // limite servo 6 [120;220]
   if (degrees >= 120 && degrees <= 220) {
 
-    float currentDegrees = servoDriverPCA9685.getCurrentDegrees(SERVO_6, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    float currentDegrees = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_6, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
     if (degrees > currentDegrees) {
       // sens +
       for (float deg = currentDegrees; deg <= degrees; deg++) {
-        servoDriverPCA9685.setDegrees(SERVO_6, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+        servoDriverPCA9685.setDegreesWithPWM(SERVO_6, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
         delay(interval);
       }
     } else if (degrees < currentDegrees) {
       // sens -
       for (float deg = currentDegrees; deg >= degrees; deg--) {
-        servoDriverPCA9685.setDegrees(SERVO_6, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+        servoDriverPCA9685.setDegreesWithPWM(SERVO_6, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
         delay(interval);
       }
     }
-    curentServosDegrees[5] = servoDriverPCA9685.getCurrentDegrees(SERVO_6, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    curentServosDegrees[5] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_6, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
   } else {
     Serial.println(F("Servo 6: hors limite\n"));
   }
+}
+
+/**
+  Fonction 1 de tests pour les méthodes avec microsecondes.
+*/
+void functionTestMicrosecond_1() {
+  long servomin_ds3225_microseconds = convertePulse4096ToMicroseconds(SERVOMIN_DS3225);
+  long servomax_ds3225_microseconds = convertePulse4096ToMicroseconds(SERVOMAX_DS3225);
+
+  Serial.print(F("Servo min microsecondes: "));
+  Serial.println(servomin_ds3225_microseconds);
+  Serial.print(F("Servo max microsecondes: "));
+  Serial.println(servomax_ds3225_microseconds);
+}
+
+/**
+  Fonction 2 de tests pour les méthodes avec microsecondes.
+*/
+void functionTestMicrosecond_2() {
 }
 
 /**
@@ -376,4 +400,20 @@ float calculIncrement(float startFirstServo, float endFirstServo, float startSec
   }
   float todoSecondServo = endSecondServo - startSecondServo;
   return todoFirstServo / todoSecondServo;
+}
+
+/**
+  Converti une pulse sur 4096 en microsecondes.
+*/
+long convertePulse4096ToMicroseconds(long pulse4096) {
+
+  long pulseMicroseconds;
+  //period in second
+  double period = 1 / frequence;
+  period = floor(period * 1000) / 1000;  // 3 digits after comma
+  //periode in microseconds
+  period = period * pow(10, 6);
+  pulseMicroseconds = ((pulse4096 * period)) / 4096;
+
+  return pulseMicroseconds;
 }
