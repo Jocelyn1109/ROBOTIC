@@ -1,0 +1,9 @@
+export FLASK_APP='chemin vers l'appli app'
+export FLASK_ENV=development
+flask run --host=0.0.0.0
+flask run --debug --host=0.0.0.0 (debug mode)
+
+pip install flask
+python -c "import flask; print(flask.__version__)"
+
+http://127.0.0.1:5000/
