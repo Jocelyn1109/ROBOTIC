@@ -12,13 +12,17 @@ pour le streaming dans une page html avec une caméra usb
 """
 
 from flask import Flask, render_template, Response
-from services.tank import TankService
+from services.tank_service import TankService
+from services.arm_service import ArmService
 from camera.streaming_generation import StreamingGeneration
-
-import cv2 # opencv
+from serial_communication.serial_communication import SerialCommunication
 
 app = Flask(__name__)
-tankService = TankService("/dev/ttyACM0", 19200)
+serialComm = SerialCommunication("/dev/ttyACM0", 19200, timeout=1)
+tankService = TankService()
+tankService.initService(serialComm, 2)
+armService = ArmService()
+tankService.initService(serialComm, 3)
 streamingGeneration = StreamingGeneration(0)
 
 app.run(host='127.0.0.1', port=5000, debug=True)
@@ -47,21 +51,39 @@ def move_tank(function):
         tankService.move_backward()
     elif function == 'turn right':
         print("Turn right")
-        tankService.turn_right()
+        tankService.move_right()
     elif function == 'turn left':
         print("Turn left")
-        tankService.turn_left()
+        tankService.move_left()
     else:
         print("Unknown function")
         
     return('', 204)
 
+#Move arm servo right
+@app.route('/arm_servo_right/<string:num_servo')
+def arm_servo_right(num_servo):
+    armService.move_right_servo(num_servo)
+
+#Move arm servo left
+@app.route('/arm_servo_left/<string:num_servo')
+def arm_servo_left(num_servo):
+    armService.move_left_servo(num_servo)     
+        
 # Stop the tank
 # Return empty response
 @app.route('/stop_tank')
 def stop_tank():
     print("Stop tank !")
-    tankService.stop_tank()
+    tankService.stop()
+    return ('', 204)
+
+# Stop the arm
+# Return empty response
+@app.route('/stop_arm')
+def stop_arm():
+    print("Stop arm !")
+    armService.stop()
     return ('', 204)
 
 # Get streaming for the PI Camera

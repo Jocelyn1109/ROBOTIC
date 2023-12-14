@@ -35,8 +35,7 @@
 			</li>
 
 			<li class="list-group-item">
-				<button id="idBtnMoveForward" type="button" class="btn btn-primary cmd_button"
-					onmouseup="stopMouvement()">
+				<button id="idBtnMoveForward" type="button" class="btn btn-primary cmd_button" onmouseup="stopTank()">
 					<a href="{{url_for('move_tank',function='move forward')}}"
 						style="text-decoration: none; color: white; font-weight: bold;">
 						MOVE FORWARD
@@ -44,8 +43,7 @@
 				</button>
 			</li>
 			<li class="list-group-item">
-				<button id="idBtnMoveBackward" type="button" class="btn btn-primary cmd_button"
-					onmouseup="stopMouvement()">
+				<button id="idBtnMoveBackward" type="button" class="btn btn-primary cmd_button" onmouseup="stopTank()">
 					<a href="{{url_for('move_tank', function='move backward')}}"
 						style="text-decoration: none; color: white; font-weight: bold;">
 						MOVE BACKWARD
@@ -53,7 +51,7 @@
 				</button>
 			</li>
 			<li class="list-group-item">
-				<button id="idBtnTurnLeft" type="button" class="btn btn-primary cmd_button" onmouseup="stopMouvement()">
+				<button id="idBtnTurnLeft" type="button" class="btn btn-primary cmd_button" onmouseup="stopTank()">
 					<a href="{{url_for('move_tank', function='turn left')}}"
 						style="text-decoration: none; color: white; font-weight: bold;">
 						TURN LEFT
@@ -61,11 +59,112 @@
 				</button>
 			</li>
 			<li class="list-group-item">
-				<button id="idBtnTurnRight" type="button" class="btn btn-primary cmd_button"
-					onmouseup="stopMouvement()">
+				<button id="idBtnTurnRight" type="button" class="btn btn-primary cmd_button" onmouseup="stopTank()">
 					<a href="{{url_for('move_tank', function='turn right')}}"
 						style="text-decoration: none; color: white; font-weight: bold;">
 						TURN RIGHT
+					</a>
+				</button>
+			</li>
+			<!-- Arm servo 1 -->
+			<li class="list-group-item">
+				<button id="idBtnArmServo1Right" type="button" class="btn btn-primary cmd_button" onmouseup="stopArm()">
+					<a href="{{url_for('arm_servo_right', num_servo='1')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						ARM SERVO 1 RIGHT
+					</a>
+				</button>
+			</li>
+			<li class="list-group-item">
+				<button id="idBtnArmServo1Left" type="button" class="btn btn-primary cmd_button" onmouseup="stopArm()">
+					<a href="{{url_for('arm_servo_left', num_servo='1')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						ARM SERVO 1 LEFT
+					</a>
+				</button>
+			</li>
+			<!-- Arm servo 2 -->
+			<li class="list-group-item">
+				<button id="idBtnArmServo2Right" type="button" class="btn btn-primary cmd_button" onmouseup="stopArm()">
+					<a href="{{url_for('arm_servo_right', num_servo='2')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						ARM SERVO 2 RIGHT
+					</a>
+				</button>
+			</li>
+			<li class="list-group-item">
+				<button id="idBtnArmServo2Left" type="button" class="btn btn-primary cmd_button" onmouseup="stopArm()">
+					<a href="{{url_for('arm_servo_left', num_servo='2')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						ARM SERVO 2 LEFT
+					</a>
+				</button>
+			</li>
+			<!-- Arm servo 3 -->
+			<li class="list-group-item">
+				<button id="idBtnArmServo3Right" type="button" class="btn btn-primary cmd_button" onmouseup="stopArm()">
+					<a href="{{url_for('arm_servo_right', num_servo='3')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						ARM SERVO 3 RIGHT
+					</a>
+				</button>
+			</li>
+			<li class="list-group-item">
+				<button id="idBtnArmServo3Left" type="button" class="btn btn-primary cmd_button" onmouseup="stopArm()">
+					<a href="{{url_for('arm_servo_left', num_servo='3')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						ARM SERVO 3 LEFT
+					</a>
+				</button>
+			</li>
+			<!-- Arm servo 4 -->
+			<li class="list-group-item">
+				<button id="idBtnArmServo4Right" type="button" class="btn btn-primary cmd_button" onmouseup="stopArm()">
+					<a href="{{url_for('arm_servo_right', num_servo='4')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						ARM SERVO 4 RIGHT
+					</a>
+				</button>
+			</li>
+			<li class="list-group-item">
+				<button id="idBtnArmServo4Left" type="button" class="btn btn-primary cmd_button" onmouseup="stopArm()">
+					<a href="{{url_for('arm_servo_left', num_servo='4')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						ARM SERVO 4 LEFT
+					</a>
+				</button>
+			</li>
+			<!-- Arm servo 5 -->
+			<li class="list-group-item">
+				<button id="idBtnArmServo5Right" type="button" class="btn btn-primary cmd_button" onmouseup="stopArm()">
+					<a href="{{url_for('arm_servo_right', num_servo='5')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						ARM SERVO 5 RIGHT
+					</a>
+				</button>
+			</li>
+			<li class="list-group-item">
+				<button id="idBtnArmServo5Left" type="button" class="btn btn-primary cmd_button" onmouseup="stopArm()">
+					<a href="{{url_for('arm_servo_left', num_servo='5')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						ARM SERVO 5 LEFT
+					</a>
+				</button>
+			</li>
+			<!-- Arm servo 6 -->
+			<li class="list-group-item">
+				<button id="idBtnArmServo6Right" type="button" class="btn btn-primary cmd_button" onmouseup="stopArm()">
+					<a href="{{url_for('arm_servo_right', num_servo='6')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						ARM SERVO 6 RIGHT
+					</a>
+				</button>
+			</li>
+			<li class="list-group-item">
+				<button id="idBtnArmServo6Left" type="button" class="btn btn-primary cmd_button" onmouseup="stopArm()">
+					<a href="{{url_for('arm_servo_left', num_servo='6')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						ARM SERVO 6 LEFT
 					</a>
 				</button>
 			</li>
