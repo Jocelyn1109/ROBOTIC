@@ -66,3 +66,9 @@ LIBRARIES/Lcd216Driver/cmake-build-debug/
 LIBRARIES/Lcd216Driver/CMakeLists.txt
 
 DOCUMENTATION/
+
+TESTS/TestAlgo/.idea/
+
+LIBRARIES/ServoDriverPCA9685/.idea/
+
+TESTS/TestAlgo/cmake-build-debug/
