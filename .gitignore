@@ -66,3 +66,5 @@ LIBRARIES/Lcd216Driver/cmake-build-debug/
 LIBRARIES/Lcd216Driver/CMakeLists.txt
 
 DOCUMENTATION/
+
+*.pyc
