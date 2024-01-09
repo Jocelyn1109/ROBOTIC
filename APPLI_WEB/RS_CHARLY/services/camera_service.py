@@ -10,9 +10,9 @@ Service for the camera.
 
 import RPi.GPIO as GPIO
 from time import sleep
-from service import Service
+from services.service import Service
 
-from serial_communication.serial_communication import SerialCommunication
+from serialcom.serial_communication import SerialCommunication
 
 class CameraService(Service):
     
