@@ -15,7 +15,7 @@ from flask import Flask, render_template, Response
 from services.tank_service import TankService
 from services.arm_service import ArmService
 from camera.streaming_generation import StreamingGeneration
-from serial_communication.serial_communication import SerialCommunication
+from serialcom.serial_communication import SerialCommunication
 
 app = Flask(__name__)
 serialComm = SerialCommunication("/dev/ttyACM0", 19200, timeout=1)

@@ -67,6 +67,8 @@ LIBRARIES/Lcd216Driver/CMakeLists.txt
 
 DOCUMENTATION/
 
+*.pyc
+
 TESTS/TestAlgo/.idea/
 
 LIBRARIES/ServoDriverPCA9685/.idea/
