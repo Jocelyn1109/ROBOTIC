@@ -46,6 +46,18 @@ void setup() {
   if (initBreakout) {
     Serial.println(F("Init arm"));
     initArm();
+    Serial.print(F("Current servo 1: "));
+    Serial.println(curentServosDegrees[0]);
+    Serial.print(F("Current servo 2: "));
+    Serial.println(curentServosDegrees[1]);
+    Serial.print(F("Current servo 3: "));
+    Serial.println(curentServosDegrees[2]);
+    Serial.print(F("Current servo 4: "));
+    Serial.println(curentServosDegrees[3]);
+    Serial.print(F("Current servo 5: "));
+    Serial.println(curentServosDegrees[4]);
+    Serial.print(F("Current servo 6: "));
+    Serial.println(curentServosDegrees[5]);
   } else {
     Serial.println(F("Erreur d'initialisation du breakout."));
   }
@@ -154,27 +166,33 @@ void extractEntryData(String command) {
 void initArm() {
 
   servoDriverPCA9685.setDegreesWithPWM(SERVO_1, 133.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
-  curentServosDegrees[0] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_1, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  //curentServosDegrees[0] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_1, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  curentServosDegrees[0] = 133.0;
   delay(100);
 
   servoDriverPCA9685.setDegreesWithPWM(SERVO_2, 270.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
-  curentServosDegrees[1] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_2, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  //curentServosDegrees[1] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_2, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  curentServosDegrees[1] = 270.0;
   delay(100);
 
   servoDriverPCA9685.setDegreesWithPWM(SERVO_3, 40.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
-  curentServosDegrees[2] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_3, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  //curentServosDegrees[2] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_3, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  curentServosDegrees[2] = 40.0;
   delay(100);
 
   servoDriverPCA9685.setDegreesWithPWM(SERVO_4, 270.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
-  curentServosDegrees[3] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_4, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  //curentServosDegrees[3] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_4, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  curentServosDegrees[3] = 270;
   delay(100);
 
   servoDriverPCA9685.setDegreesWithPWM(SERVO_5, 125.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
-  curentServosDegrees[4] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_5, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  //curentServosDegrees[4] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_5, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  curentServosDegrees[4] = 125.0;
   delay(100);
 
   servoDriverPCA9685.setDegreesWithPWM(SERVO_6, 120.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
-  curentServosDegrees[5] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_6, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  //curentServosDegrees[5] = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_6, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+  curentServosDegrees[5] = 120.0;
   delay(100);
 }
 
@@ -188,7 +206,8 @@ void move_servo_1(float degrees) {
   // limite servo 1 [66;200]
   if (degrees >= 66 && degrees <= 200) {
 
-    float currentDegrees = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_1, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    //float currentDegrees = servoDriverPCA9685.getCurrentDegreesWithPWM(SERVO_1, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    float currentDegrees = curentServosDegrees[0];
     if (degrees > currentDegrees) {
       // sens +
       for (float deg = currentDegrees; deg <= degrees; deg++) {
@@ -215,7 +234,14 @@ void move_servo_2(float degrees) {
 
   Serial.println(F("Mouvement servo 2\n"));
 
-  float incr = calculIncrement(230.0, degrees, curentServosDegrees[2], 80.0);
+  //float incr = calculIncrement(230.0, degrees, curentServosDegrees[2], 80.0);
+  if (degrees <= 230.0 && curentServosDegrees[2] < 80.0) {
+    //Serial.println(F("Mouvement servo 3\n"));
+    //servoDriverPCA9685.setDegreesWithPWM(SERVO_3, 90.0, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+    //curentServosDegrees[2] = 90.0;
+    //delay(interval);
+    move_servo_3(90.0);
+  }
 
   // limite servo 2 [125;270]
   if (degrees >= 125 && degrees <= 270) {
@@ -230,12 +256,17 @@ void move_servo_2(float degrees) {
     } else if (degrees < currentDegrees) {
       // sens -
       for (float deg = currentDegrees; deg >= degrees; deg--) {
+        //servoDriverPCA9685.setDegreesWithPWM(SERVO_2, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+        //if (deg <= 230.0 && curentServosDegrees[2] < 80.0) {
+        //Serial.println(F("Mouvement servo 3\n"));
+        //float degreesS3 = curentServosDegrees[2] + incr;
+        //float degreesS3 = 90.0;
+        //servoDriverPCA9685.setDegreesWithPWM(SERVO_3, degreesS3, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
+        //curentServosDegrees[2] = degreesS3;
+        //Serial.println(curentServosDegrees[2]);
+        //delay(interval);
+        //}
         servoDriverPCA9685.setDegreesWithPWM(SERVO_2, deg, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
-        if (deg <= 230.0 && curentServosDegrees[2] < 80.0) {
-          float degreesS3 = curentServosDegrees[2] + incr;
-          servoDriverPCA9685.setDegreesWithPWM(SERVO_3, degreesS3, MAX_DEGREES, SERVOMIN_DS3225, SERVOMAX_DS3225, true);
-          curentServosDegrees[2] = degreesS3;
-        }
         delay(interval);
       }
     }
@@ -395,11 +426,22 @@ void functionTestMicrosecond_2() {
 float calculIncrement(float startFirstServo, float endFirstServo, float startSecondServo, float endSecondServo) {
 
   float todoFirstServo = endFirstServo - startFirstServo;
-  if (endFirstServo < startFirstServo) {
+  if (todoFirstServo < 0) {
     todoFirstServo = todoFirstServo * -1;
   }
   float todoSecondServo = endSecondServo - startSecondServo;
-  return todoFirstServo / todoSecondServo;
+  if (todoSecondServo < 0) {
+    todoSecondServo = todoSecondServo * -1;
+  }
+
+  float incr = 0.0;
+  if (todoFirstServo > todoSecondServo) {
+    incr = todoFirstServo / todoSecondServo;
+  } else {
+    incr = todoSecondServo / todoFirstServo;
+  }
+
+  return incr;
 }
 
 /**
