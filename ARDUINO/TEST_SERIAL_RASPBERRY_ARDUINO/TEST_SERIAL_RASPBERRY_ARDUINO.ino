@@ -14,30 +14,47 @@ const uint8_t TX_PIN = 2;
 
 Lcd216Driver lcd216Driver(RX_PIN, TX_PIN);
 FrameManager frameManager;
+bool frameReceived = false;
 
 void setup() {
 
   // Initialisation du terminal serie
   Serial.begin(19200);
 
-  //lcd216Driver.setLcdSize(16, 2);
+  pinMode(3, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(3), stopTank, RISING);
 
+  // Initialisation du LCD
   lcd216Driver.autoScrollOff();
-  //lcd216Driver.blockCursorOn();
   lcd216Driver.underlineCursorOn();
-
-  //lcd216Driver.setContrast(250);
   lcd216Driver.setDefaultContrast();
+  lcd216Driver.setDefaultColor();
+  lcd216Driver.clearScreen();
 
 }
 
 void loop() {
 
+  String frame = "";
+
   // Lecture des trames sur le port série.
   if (Serial.available() > 0) {
-    String frame = "";
+
     frame = Serial.readString();
-    frame.trim();
+    Serial.print(F("Frame length: "));
+    Serial.println(frame.length());
+
+    if (frame.length() > 8) {
+      lcd216Driver.clearScreen();
+      lcd216Driver.setCursorPosition(1, 1);
+      lcd216Driver.writeMessage("ERROR FRAME");
+    } else {
+      frameReceived = true;
+    }
+  }
+
+  if (frameReceived) {
+    frameReceived = false;
 
     frameManager.setFrame(frame.c_str(), frame.length());
     char device = frameManager.getDevice();
@@ -57,11 +74,15 @@ void loop() {
     } else if (device == 'C') {
       lcd216Driver.clearScreen();
       lcd216Driver.setCursorPosition(1, 1);
-      // Orange backlight color R:96, G:50, B:5
-      lcd216Driver.setbacklightColor(96, 50, 5);
+      // Green backlight color R:0, G:153, B:0
+      lcd216Driver.setbacklightColor(0, 153, 0);
       lcd216Driver.writeMessage(frame);
     }
-
   }
 
+}
+
+void stopTank() {
+  digitalWrite(LED_BUILTIN, ! digitalRead(LED_BUILTIN));
+  Serial.println(F("stop"));
 }
