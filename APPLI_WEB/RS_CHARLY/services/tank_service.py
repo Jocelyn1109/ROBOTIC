@@ -10,9 +10,9 @@ Service for the Tank.
 
 import RPi.GPIO as GPIO
 from time import sleep
-from services.service import Service
+from .service import Service
 
-from serialcom.serial_communication import SerialCommunication
+from ..serialcom.serial_communication import SerialCommunication
 
 class TankService(Service):
     
@@ -20,8 +20,8 @@ class TankService(Service):
     def initService(self,serial, output_pin):
         self.outputPin = output_pin
         self.serial_ = serial
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(self.outputPin, GPIO.OUT, initial=GPIO.LOW) # output setting (LOW by default)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.outputPin, GPIO.OUT)
     
     # Move forward
     def move_forward(self):

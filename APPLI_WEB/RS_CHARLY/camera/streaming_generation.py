@@ -8,7 +8,7 @@ Class for streaming generation.
 
 """
 
-from camera.camera_pi import CameraPi
+from .camera_pi import CameraPi
 import cv2 # opencv
 from time import sleep
 

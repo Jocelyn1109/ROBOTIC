@@ -1,3 +1,2 @@
-07/05/2021 16:41:33: sending data -> TNK,TR,8,0
-07/05/2021 16:41:33: write 10 bytes
-07/05/2021 16:41:35: answer -> b'Arduino received : tata'
+22/01/2024 12:57:37: sending data -> T: :R: 
+22/01/2024 12:57:37: write 7 bytes
