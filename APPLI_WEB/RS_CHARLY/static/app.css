@@ -1,5 +1,5 @@
 .cmd_button {
-  width: 170px;
+  width: 200px;
   height: 38px;
   top: 2px;
   left: 1px;
@@ -28,4 +28,10 @@ img#camera1,
 
 #cameras #camera2 {
   margin-left: 10px;
+}
+
+#idMoveTank, #idMoveArm1, #idMoveArm2 {
+  display: inline;
+  float: left;
+  padding-right: 20px;
 }

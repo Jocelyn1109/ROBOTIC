@@ -21,18 +21,19 @@
 <body>
 	<h1>RS CHARLY 1.0</h1>
 
-	<div style="padding-left: 5px">
+	<div id="idMoveTank" style="padding-left: 5px">
 
 		<ul class="list-group">
 
-			<li id="cameras" class="list-group-item">
-				<div>
+			<!--<li id="cameras" class="list-group-item">-->
+				<!--<div>-->
 					<!--<img id="camera1" src="{{ url_for('video_feed_usb_cam') }}">-->
-				</div>
-				<div>
+				<!--</div>-->
+				<!--<div>-->
 					<!--<img id="camera2" src="{{ url_for('video_feed_pi_cam') }}">-->
-				</div>
-			</li>
+				<!--</div>-->
+			<!--</li>-->
+			<li class="list-group-item"><strong>TANK</strong></li>
 
 			<li class="list-group-item">
 				<button id="idBtnMoveForward" type="button" class="btn btn-primary cmd_button" onmouseup="stopTank()">
@@ -66,8 +67,12 @@
 					</a>
 				</button>
 			</li>
-			<!-- Arm servo 1 -->
-			<li class="list-group-item">
+		</ul>
+	</div>
+	<div id="idMoveArm1">
+    	<ul class="list-group">
+        	<li class="list-group-item"><strong>ARM GROUP 1</strong></li>
+        	<li class="list-group-item">
 				<button id="idBtnArmServo1Right" type="button" class="btn btn-primary cmd_button" onmouseup="stopArm()">
 					<a href="{{url_for('arm_servo_right', num_servo='1')}}"
 						style="text-decoration: none; color: white; font-weight: bold;">
@@ -117,6 +122,12 @@
 					</a>
 				</button>
 			</li>
+    	</ul>
+	</div>
+	
+	<div id="idMoveArm2">
+    	<ul class="list-group">
+        	<li class="list-group-item"><strong>ARM GROUP 2</strong></li>
 			<!-- Arm servo 4 -->
 			<li class="list-group-item">
 				<button id="idBtnArmServo4Right" type="button" class="btn btn-primary cmd_button" onmouseup="stopArm()">
@@ -168,8 +179,9 @@
 					</a>
 				</button>
 			</li>
-		</ul>
+    	</ul>
 	</div>
+	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
 		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
 		crossorigin="anonymous"></script>
