@@ -12,18 +12,19 @@
 #include "Logger.h"
 
 const uint8_t RX_PIN = 0;
-const uint8_t TX_PIN = 1;
+const uint8_t TX_PIN = 2;
 
 const uint8_t A1A = 5;   // pin PWM
-const uint8_t A1B = 9;   // pin PWM
-const uint8_t B1A = 10;  // pin PWM
-const uint8_t B1B = 11;  // pin PWM
+const uint8_t A1B = 6;   // pin PWM
+const uint8_t B1A = 9;   // pin PWM
+const uint8_t B1B = 10;  // pin PWM
 const uint8_t SC_PIN = 4;
 
 Lcd216Driver lcd216Driver(RX_PIN, TX_PIN);
 FrameManager frameManager;
 Logger logger(String("drvL9110.txt"));
-MotorDriverL9110 motorDriverL9110(A1A, A1B, B1A, B1B, &logger);
+//MotorDriverL9110 motorDriverL9110(A1A, A1B, B1A, B1B, &logger);
+MotorDriverL9110 motorDriverL9110(A1A, A1B, B1A, B1B);
 bool frameReceived = false;
 uint8_t resInitLog = 0;
 
@@ -43,18 +44,19 @@ void setup() {
   lcd216Driver.clearScreen();
 
   //Initialisation du logger
-  resInitLog = logger.loggerInitialization(SC_PIN);
-  if (resInitLog == 1) {
-    Serial.println(F("Erreur lors de l'initialisation du logger"));
-  } else {
-    Serial.println(F("Succès de l'initialisation du logger"));
-  }
+  // resInitLog = logger.loggerInitialization(SC_PIN);
+  // if (resInitLog == 1) {
+  //   Serial.println(F("Erreur lors de l'initialisation du logger"));
+  // } else {
+  //   Serial.println(F("Succès de l'initialisation du logger"));
+  // }
 
   pinMode(A1A, OUTPUT);
   pinMode(A1B, OUTPUT);
   pinMode(B1A, OUTPUT);
   pinMode(B1B, OUTPUT);
 
+  lcd216Driver.writeMessage("INIT OK");
 }
 
 void loop() {
@@ -90,22 +92,26 @@ void loop() {
       lcd216Driver.setbacklightColor(204, 0, 0);
       lcd216Driver.writeMessage(frame);
 
-      char subdevice = frameManager.getSubDevice();
-      switch (subdevice) {
+      char function = frameManager.getFunction();
+      switch (function) {
         case 'F':
-          motorDriverL9110.accelerateForward(0, 255, 2);
+          Serial.println(F("accelerateForward"));
+          motorDriverL9110.accelerateForward(0, 255, 15);
           break;
         case 'B':
+          Serial.println(F("accelerateBackward"));
           motorDriverL9110.accelerateBackward(0, 255, 2);
           break;
         case 'L':
-          motorDriverL9110.turnLeft(100);
+          Serial.println(F("turnLeft"));
+          motorDriverL9110.turnLeft(255);
           break;
         case 'R':
-          motorDriverL9110.turnRight(100);
+          Serial.println(F("turnRight"));
+          motorDriverL9110.turnRight(255);
           break;
         default:
-          Serial.println(F("Unknown subdevice"));
+          Serial.println(F("Unknown function"));
       }
     } else if (device == 'A') {
       lcd216Driver.clearScreen();
@@ -124,6 +130,6 @@ void loop() {
 }
 
 void stopTank() {
-  Serial.println(F("stop"));
   motorDriverL9110.stopMotorAccelerationDeceleration();
+  //motorDriverL9110.stopMotor();
 }

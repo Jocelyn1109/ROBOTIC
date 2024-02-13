@@ -16,7 +16,7 @@ public:
      * @param pinB1B: pin B1B.
      * @param logger (let NULL for no log).
      */
-    explicit MotorDriverL9110(uint8_t pinA1A, uint8_t pinA1B, uint8_t pinB1A, uint8_t pinB1B, Logger *logger);
+    explicit MotorDriverL9110(uint8_t pinA1A, uint8_t pinA1B, uint8_t pinB1A, uint8_t pinB1B, Logger *logger = nullptr);
 
     /**
      * Copy constructor.
@@ -34,7 +34,7 @@ public:
      * Stop the motor.
      * @return 1 in case of error, otherwise 0.
      */
-    uint8_t stopMotor() const;
+    uint8_t stopMotor();
 
     /**
      * Go backward.
@@ -105,6 +105,12 @@ public:
      */
     uint8_t stopMotorAccelerationDeceleration();
 
+    /**
+    * Get the acceleration/deceleration status
+    * @return true if accelerate/deccelerate is in progress else false.
+    */
+    bool isAccelerateDecelerate() const { return isAccelerateDecelerate_; }
+
 private:
 
     uint8_t pinA1A_;
@@ -112,6 +118,7 @@ private:
     uint8_t pinB1A_;
     uint8_t pinB1B_;
     bool stopAccelerateDecelerate_;
+    bool isAccelerateDecelerate_;
     Logger *logger_;
 
     /**

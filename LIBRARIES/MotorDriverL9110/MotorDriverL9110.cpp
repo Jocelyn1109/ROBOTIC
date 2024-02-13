@@ -60,7 +60,7 @@ void MotorDriverL9110::initPin() {
  * Stop the motor.
  * @return 1 in case of error, otherwise 0.
  */
-uint8_t MotorDriverL9110::stopMotor() const {
+uint8_t MotorDriverL9110::stopMotor() {
 
     if (logger_ != nullptr) {
         uint8_t resW = logger_->writeInfoMessage(String((const __FlashStringHelper *) STOP_MOTOR_LOG_MESSAGE));
@@ -72,6 +72,9 @@ uint8_t MotorDriverL9110::stopMotor() const {
     digitalWrite(pinA1B_, HIGH);
     digitalWrite(pinB1A_, HIGH);
     digitalWrite(pinB1B_, HIGH);
+
+    stopAccelerateDecelerate_ = false;
+    isAccelerateDecelerate_ = false;
 
     return 0;
 }
@@ -148,10 +151,14 @@ uint8_t MotorDriverL9110::accelerateForward(uint8_t fromSpeed, uint8_t toSpeed, 
     digitalWrite(pinB1B_, 0);
     for (int i = fromSpeed; i <= toSpeed; i++) {
 
+        // acceleration in progress
+        if (isAccelerateDecelerate_ == false) {
+            isAccelerateDecelerate_ = true;
+        }
+
         // avoid the stop during acceleration
         if (stopAccelerateDecelerate_) {
             this->stopMotor();
-            stopAccelerateDecelerate_ = false;
             return 0;
         }
 
@@ -159,6 +166,7 @@ uint8_t MotorDriverL9110::accelerateForward(uint8_t fromSpeed, uint8_t toSpeed, 
         analogWrite(pinB1A_, i);
         delay(accelerateSpeed);
     }
+    isAccelerateDecelerate_ = false;
 
     return 0;
 }
@@ -188,10 +196,14 @@ uint8_t MotorDriverL9110::accelerateBackward(uint8_t fromSpeed, uint8_t toSpeed,
     digitalWrite(pinB1A_, 0);
     for (int i = fromSpeed; i <= toSpeed; i++) {
 
+        // acceleration in progress
+        if (isAccelerateDecelerate_ == false) {
+            isAccelerateDecelerate_ = true;
+        }
+
         // avoid the stop during acceleration
         if (stopAccelerateDecelerate_) {
             this->stopMotor();
-            stopAccelerateDecelerate_ = false;
             return 0;
         }
 
@@ -199,6 +211,7 @@ uint8_t MotorDriverL9110::accelerateBackward(uint8_t fromSpeed, uint8_t toSpeed,
         analogWrite(pinB1B_, i);
         delay(accelerateSpeed);
     }
+    isAccelerateDecelerate_ == false;
 
     return 0;
 }
@@ -227,10 +240,14 @@ uint8_t MotorDriverL9110::decelerateForward(uint8_t fromSpeed, uint8_t toSpeed, 
     digitalWrite(pinB1B_, 0);
     for (int i = fromSpeed; i >= toSpeed; i--) {
 
+        // decceleration in progress
+        if (isAccelerateDecelerate_ == false) {
+            isAccelerateDecelerate_ = true;
+        }
+        
         // avoid the stop during decceleration
         if (stopAccelerateDecelerate_) {
             this->stopMotor();
-            stopAccelerateDecelerate_ = false;
             return 0;
         }
 
@@ -238,6 +255,7 @@ uint8_t MotorDriverL9110::decelerateForward(uint8_t fromSpeed, uint8_t toSpeed, 
         analogWrite(pinB1A_, i);
         delay(decelerateSpeed);
     }
+    isAccelerateDecelerate_ == false;
 
     return 0;
 }
@@ -266,10 +284,14 @@ uint8_t MotorDriverL9110::decelerateBackward(uint8_t fromSpeed, uint8_t toSpeed,
     digitalWrite(pinB1A_, 0);
     for (int i = fromSpeed; i >= toSpeed; i--) {
 
+        // decceleration in progress
+        if (isAccelerateDecelerate_ == false) {
+            isAccelerateDecelerate_ = true;
+        }
+
         // avoid the stop during decceleration
         if (stopAccelerateDecelerate_) {
             this->stopMotor();
-            stopAccelerateDecelerate_ = false;
             return 0;
         }
 
@@ -277,6 +299,7 @@ uint8_t MotorDriverL9110::decelerateBackward(uint8_t fromSpeed, uint8_t toSpeed,
         analogWrite(pinB1B_, i);
         delay(decelerateSpeed);
     }
+    isAccelerateDecelerate_ == false;
 
     return 0;
 }
