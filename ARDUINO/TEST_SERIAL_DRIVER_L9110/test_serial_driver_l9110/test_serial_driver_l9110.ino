@@ -96,7 +96,7 @@ void loop() {
       switch (function) {
         case 'F':
           Serial.println(F("accelerateForward"));
-          motorDriverL9110.accelerateForward(0, 255, 15);
+          motorDriverL9110.accelerateForward(0, 255, 2);
           break;
         case 'B':
           Serial.println(F("accelerateBackward"));
@@ -121,7 +121,7 @@ void loop() {
       lcd216Driver.writeMessage(frame);
     } else if (device == 'C') {
       lcd216Driver.clearScreen();
-      lcd216Driver.setCursorPosition(1, 1);
+lcd216Driver.setCursorPosition(1, 1);
       // Green backlight color R:0, G:153, B:0
       lcd216Driver.setbacklightColor(0, 153, 0);
       lcd216Driver.writeMessage(frame);
@@ -130,6 +130,11 @@ void loop() {
 }
 
 void stopTank() {
-  motorDriverL9110.stopMotorAccelerationDeceleration();
-  //motorDriverL9110.stopMotor();
+  if (motorDriverL9110.isAccelerateDecelerate()) {
+    motorDriverL9110.stopMotorAccelerationDeceleration();
+    Serial.println(F("stopMotorAccelerationDeceleration"));
+  } else {
+    motorDriverL9110.stopMotor();
+    Serial.println(F("stopMotor"));
+  }
 }

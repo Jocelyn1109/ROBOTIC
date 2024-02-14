@@ -211,7 +211,7 @@ uint8_t MotorDriverL9110::accelerateBackward(uint8_t fromSpeed, uint8_t toSpeed,
         analogWrite(pinB1B_, i);
         delay(accelerateSpeed);
     }
-    isAccelerateDecelerate_ == false;
+    isAccelerateDecelerate_ = false;
 
     return 0;
 }
@@ -255,7 +255,7 @@ uint8_t MotorDriverL9110::decelerateForward(uint8_t fromSpeed, uint8_t toSpeed, 
         analogWrite(pinB1A_, i);
         delay(decelerateSpeed);
     }
-    isAccelerateDecelerate_ == false;
+    isAccelerateDecelerate_ = false;
 
     return 0;
 }
@@ -299,7 +299,7 @@ uint8_t MotorDriverL9110::decelerateBackward(uint8_t fromSpeed, uint8_t toSpeed,
         analogWrite(pinB1B_, i);
         delay(decelerateSpeed);
     }
-    isAccelerateDecelerate_ == false;
+    isAccelerateDecelerate_ = false;
 
     return 0;
 }
