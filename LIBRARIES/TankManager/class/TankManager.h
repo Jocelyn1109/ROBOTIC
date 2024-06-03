@@ -1,52 +1,61 @@
-#ifndef _MOTOR_DRIVER_L9910_H_
-#define _MOTOR_DRIVER_L9910_H_
+/*
+ * File:   TankManager.h
+ * Author: Jocelyn Girod
+ *
+ * Created on 03 June 2024
+ *
+ * Tank manager.
+ */
+
+#ifndef TANKMANAGER_TANKMANAGER_H
+#define TANKMANAGER_TANKMANAGER_H
 
 #include <stdint.h>
 #include "Logger.h"
+#include "MotorDriverL9110.h"
 
-class MotorDriverL9110 {
+class TankManager {
 
 public:
 
     /**
      * Default constructor.
+     * @param logger (let NULL for no log).
      * @param pinA1A: pin A1A.
      * @param pinA1B: pin A1B.
      * @param pinB1A: pin B1A.
      * @param pinB1B: pin B1B.
-     * @param logger (let NULL for no log).
      */
-    explicit MotorDriverL9110(uint8_t pinA1A, uint8_t pinA1B, uint8_t pinB1A, uint8_t pinB1B, Logger *logger);
+    explicit TankManager(Logger *logger, uint8_t pinA1A, uint8_t pinA1B, uint8_t pinB1A, uint8_t pinB1B);
 
     /**
      * Copy constructor.
      *
-     * @param other MotorDriverL9110 object.
+     * @param other TankManager object.
      */
-    MotorDriverL9110(const MotorDriverL9110 &other);
+    TankManager(const TankManager &other);
 
     /**
      * Destructor
      */
-    virtual ~MotorDriverL9110();
+    virtual ~TankManager();
+
 
     /**
-     * Stop the motor.
+     * Stop the tank.
      * @return 1 in case of error, otherwise 0.
      */
-    uint8_t stopMotor() const;
+    uint8_t stopTank() const;
 
     /**
      * Go backward.
      * @param speed: speed between 0 and 255 (0 <= speed <= 255).
-     * @return 1 in case of error, otherwise 0.
      */
     uint8_t goBackward(uint8_t speed) const;
 
     /**
      * Go forward.
      * @param speed: speed between 0 and 255 (0 <= speed <= 255).
-     * @return 1 in case of error, otherwise 0.
      */
     uint8_t goForward(int speed) const;
 
@@ -55,7 +64,7 @@ public:
      * @param fromSpeed: start speed (0 <= fromSpeed <= 255 & fromSpeed < toSpeed).
      * @param toSpeed: end speed (0 <= toSpeed <= 255 & toSpeed > fromSpeed).
      * @param accelerateSpeed: acceleration speed (the smaller accelerateSpeed the faster the acceleration because in fact accelerateSpeed is a "delay").
-     * @return 1 in case of error ( if fromSpeed >= toSpeedor or logger error), otherwise 0.
+     * @return 1 in case of error ( if fromSpeed >= toSpeed or logger error), otherwise 0.
      */
     uint8_t accelerateForward(uint8_t fromSpeed, uint8_t toSpeed, int accelerateSpeed);
 
@@ -68,8 +77,9 @@ public:
      */
     uint8_t accelerateBackward(uint8_t fromSpeed, uint8_t toSpeed, int accelerateSpeed);
 
+
     /**
-     * Decelerate forward.
+     * Deccelerate forward.
      * @param fromSpeed: start speed (0 <= fromSpeed <= 255 & fromSpeed > toSpeed).
      * @param toSpeed: end speed (0 <= toSpeed <= 255 & toSpeed < fromSpeed).
      * @param decelerateSpeed: deceleration speed (the smaller decelerateSpeed the faster the deceleration because in fact decelerateSpeed is a "delay").
@@ -77,11 +87,12 @@ public:
      */
     uint8_t decelerateForward(uint8_t fromSpeed, uint8_t toSpeed, int decelerateSpeed);
 
+
     /**
-     * Decelerate backward.
+     * Deccelerate backward.
      * @param fromSpeed: start speed (0 <= fromSpeed <= 255 & fromSpeed > toSpeed).
      * @param toSpeed: end speed (0 <= toSpeed <= 255 & toSpeed < fromSpeed).
-     * @param decelerateSpeed: decceleration speed (the smaller decelerateSpeed the faster the deceleration because in fact decelerateSpeed is a "delay").
+     * @param decelerateSpeed: deceleration speed (the smaller decelerateSpeed the faster the deceleration because in fact decelerateSpeed is a "delay").
      * @return 1 in case of error ( if fromSpeed <= toSpeed or logger error), otherwise 0.
      */
     uint8_t decelerateBackward(uint8_t fromSpeed, uint8_t toSpeed, int decelerateSpeed);
@@ -104,22 +115,11 @@ public:
      * Stop motor during acceleration or deceleration.
      * @return 1 in case of error, otherwise 0.
      */
-    uint8_t stopMotorAccelerationDeceleration();
+    uint8_t stopAccelerationDeceleration();
 
 private:
-
-    uint8_t pinA1A_;
-    uint8_t pinA1B_;
-    uint8_t pinB1A_;
-    uint8_t pinB1B_;
-    bool stopAccelerateDecelerate_;
-    Logger *logger_;
-
-    /**
-     * Initialize pins.
-     */
-    void initPin();
-
+    MotorDriverL9110 _motorDriverL9110 = MotorDriverL9110(0, 0, 0, 0, nullptr);
 };
 
-#endif //_MOTOR_DRIVER_L9910_H_
+
+#endif //TANKMANAGER_TANKMANAGER_H

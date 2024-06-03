@@ -22,7 +22,7 @@
 
 class FrameManager {
 public:
-    FrameManager();
+    explicit FrameManager();
     FrameManager(const FrameManager& orig);
     virtual ~FrameManager();
 

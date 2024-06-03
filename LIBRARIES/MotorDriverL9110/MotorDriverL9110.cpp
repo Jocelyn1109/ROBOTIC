@@ -327,6 +327,7 @@ uint8_t MotorDriverL9110::turnLeft(int speed) const {
 
 /**
  * Stop motor during acceleration or deceleration.
+ * @return 1 in case of error, otherwise 0.
  */
 uint8_t MotorDriverL9110::stopMotorAccelerationDeceleration() {
 
