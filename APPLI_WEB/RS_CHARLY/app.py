@@ -13,17 +13,17 @@
 
 from flask import Flask, render_template
 #from flask import Flask, render_template, Response
-# from .services.tank_service import TankService
+from .services.tank_service import TankService
 # from .services.arm_service import ArmService
 # from .camera.streaming_generation import StreamingGeneration
-# from .serialcom.serial_communication import SerialCommunication
+from .serialcom.serial_communication import SerialCommunication
 
 app = Flask(__name__)
-# serialComm = SerialCommunication("/dev/ttyACM0", 19200, timeout=1)
-# tankService = TankService()
-# tankService.initService(serialComm, 2)
+serialComm = SerialCommunication("/dev/ttyACM0", 19200, timeout=1)
+tankService = TankService()
+tankService.initService(serialComm, 2)
 # armService = ArmService()
-# tankService.initService(serialComm, 3)
+tankService.initService(serialComm, 3)
 # streamingGeneration = StreamingGeneration(0)
 
 #app.run(host='127.0.0.1', port=5000, debug=True)
@@ -45,16 +45,16 @@ def index():
 @app.route('/move_tank/<string:function>')
 def move_tank(function):
     if function == 'move forward':
-        #tankService.move_forward()
+        tankService.move_forward()
         return('', 204)
     elif function == 'move backward':
-        #tankService.move_backward()
+        tankService.move_backward()
         return('', 204)
     elif function == 'turn right':
-        #tankService.move_right()
+        tankService.move_right()
         return('', 204)
     elif function == 'turn left':
-        #tankService.move_left()
+        tankService.move_left()
         return('', 204)
     else:
         print("Unknown function") 
@@ -79,7 +79,7 @@ def arm_servo_left(num_servo):
 @app.route('/stop_tank')
 def stop_tank():
     print("Stop tank !")
-    #tankService.stop()
+    tankService.stop()
     return ('', 204)
 
 # Stop the arm
