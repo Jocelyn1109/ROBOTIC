@@ -51,6 +51,54 @@
 				</button>
 			</li>
 			<li class="list-group-item">
+				<button id="idBtnAccelerateForward" type="button" class="btn btn-primary cmd_button" onmouseup="stopTank()">
+					<a href="{{url_for('move_tank',function='accelerate forward')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						ACCELERATE FORWARD
+					</a>
+				</button>
+			</li>
+			<li class="list-group-item">
+				<button id="idBtnAccelerateBackward" type="button" class="btn btn-primary cmd_button" onmouseup="stopTank()">
+					<a href="{{url_for('move_tank',function='accelerate backward')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						ACCELERATE BACKWARD
+					</a>
+				</button>
+			</li>
+			<li class="list-group-item">
+				<button id="idBtnDecelerateForward" type="button" class="btn btn-primary cmd_button" onmouseup="stopTank()">
+					<a href="{{url_for('move_tank',function='decelerate forward')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						DECELERATE FORWARD
+					</a>
+				</button>
+			</li>
+			<li class="list-group-item">
+				<button id="idBtnDecelerateBackward" type="button" class="btn btn-primary cmd_button" onmouseup="stopTank()">
+					<a href="{{url_for('move_tank',function='decelerate backward')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						DECELERATE BACKWARD
+					</a>
+				</button>
+			</li>
+			<li class="list-group-item">
+				<button id="idBtnIncreaseSpeed" type="button" class="btn btn-primary cmd_button" onmouseup="stopTank()">
+					<a href="{{url_for('move_tank',function='increase speed')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						INCREASE SPEED
+					</a>
+				</button>
+			</li>
+			<li class="list-group-item">
+				<button id="idBtnDecreaseSpeed" type="button" class="btn btn-primary cmd_button" onmouseup="stopTank()">
+					<a href="{{url_for('move_tank',function='decrease speed')}}"
+						style="text-decoration: none; color: white; font-weight: bold;">
+						DECREASE SPEED
+					</a>
+				</button>
+			</li>
+			<li class="list-group-item">
 				<button id="idBtnTurnLeft" type="button" class="btn btn-primary cmd_button" onmouseup="stopTank()">
 					<a href="{{url_for('move_tank', function='turn left')}}"
 						style="text-decoration: none; color: white; font-weight: bold;">

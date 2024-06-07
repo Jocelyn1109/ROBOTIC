@@ -34,6 +34,42 @@ class TankService(Service):
         if isinstance(self.serial_, SerialCommunication):
             answer = self.serial_.sendData("T: :B: ")
             print(answer)
+            
+    # Accelerate forward
+    def accelerate_forward(self):
+        if isinstance(self.serial_, SerialCommunication):
+            answer = self.serial_.sendData("T: :A:F")
+            print(answer)
+            
+    # Accelerate backward
+    def accelerate_backward(self):
+        if isinstance(self.serial_, SerialCommunication):
+            answer = self.serial_.sendData("T: :A:B")
+            print(answer)
+            
+    # Decelerate forward
+    def decelerate_forward(self):
+        if isinstance(self.serial_, SerialCommunication):
+            answer = self.serial_.sendData("T: :D:F")
+            print(answer)
+            
+    # Decelerate backward
+    def decelerate_backward(self):
+        if isinstance(self.serial_, SerialCommunication):
+            answer = self.serial_.sendData("T: :D:B")
+            print(answer)
+            
+    # Increase speed
+    def increase_speed(self):
+        if isinstance(self.serial_, SerialCommunication):
+            answer = self.serial_.sendData("T: :S:+")
+            print(answer)
+            
+    # Decrease speed
+    def decrease_speed(self):
+        if isinstance(self.serial_, SerialCommunication):
+            answer = self.serial_.sendData("T: :S:-")
+            print(answer)
         
     # Turn right
     def move_right(self):

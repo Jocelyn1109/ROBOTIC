@@ -53,6 +53,24 @@ def move_tank(function):
     elif function == 'turn right':
         tankService.move_right()
         return('', 204)
+    elif function == 'accelerate forward':
+        tankService.accelerate_forward()
+        return('', 204)
+    elif function == 'accelerate backward':
+        tankService.accelerate_backward()
+        return('', 204)
+    elif function == 'decelerate forward':
+        tankService.decelerate_forward()
+        return('', 204)
+    elif function == 'decelerate backward':
+        tankService.decelerate_backward()
+        return('', 204)
+    elif function == 'increase speed':
+        tankService.increase_speed()
+        return('', 204)
+    elif function == 'decrease speed':
+        tankService.decrease_speed()
+        return('', 204)
     elif function == 'turn left':
         tankService.move_left()
         return('', 204)
