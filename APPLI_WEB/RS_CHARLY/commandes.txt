@@ -15,3 +15,14 @@ export FLASK_ENV=development
 (exécuter flask en mode developpement)
 
 export PYTHONPATH=${PYTHONPATH}:${HOME}/Dev/APPLI_WEB/RS_CHARLY
+
+
+Pour accéder à l'application Flask depuis un autre PC:
+démarrer l'application avec une des commandes suivantes ->
+	flask run --host=0.0.0.0
+	flask run --debug --host=0.0.0.0 (debug mode - rend le serveur visible de l'extérieur)
+
+puis sur le PC distant taper l'url suivante dans le navigateur:
+http://ip de la machine Flask:5000
+exemple si l'ip de la machine où est lancé le serveur est: 192.168.1.90
+alors l'url sera http://192.168.1.90:5000.
