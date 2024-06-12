@@ -117,6 +117,12 @@ public:
      */
     uint8_t stopAccelerationDeceleration();
 
+    /**
+     * Get the status of acceleration or deceleration
+     * @return true id accelerate/decelerate, otherwise false
+     */
+    bool accelerationDecelerationStatus() const { return _motorDriverL9110.isAccelerationDeceleration(); }
+
 private:
     MotorDriverL9110 _motorDriverL9110 = MotorDriverL9110(0, 0, 0, 0, nullptr);
 };

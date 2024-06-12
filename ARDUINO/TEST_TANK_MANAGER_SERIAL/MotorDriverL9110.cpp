@@ -146,10 +146,12 @@ uint8_t MotorDriverL9110::accelerateForward(uint8_t fromSpeed, uint8_t toSpeed, 
 
     digitalWrite(pinA1B_, 0);
     digitalWrite(pinB1B_, 0);
+    isAccelerateDecelerate_ = true;
     for (int i = fromSpeed; i <= toSpeed; i++) {
 
         // avoid the stop during acceleration
         if (stopAccelerateDecelerate_) {
+            isAccelerateDecelerate_ = false;
             this->stopMotor();
             stopAccelerateDecelerate_ = false;
             return 0;
@@ -186,10 +188,12 @@ uint8_t MotorDriverL9110::accelerateBackward(uint8_t fromSpeed, uint8_t toSpeed,
 
     digitalWrite(pinA1A_, 0);
     digitalWrite(pinB1A_, 0);
+    isAccelerateDecelerate_ = true;
     for (int i = fromSpeed; i <= toSpeed; i++) {
 
         // avoid the stop during acceleration
         if (stopAccelerateDecelerate_) {
+            isAccelerateDecelerate_ = false;
             this->stopMotor();
             stopAccelerateDecelerate_ = false;
             return 0;
@@ -225,10 +229,12 @@ uint8_t MotorDriverL9110::decelerateForward(uint8_t fromSpeed, uint8_t toSpeed, 
 
     digitalWrite(pinA1B_, 0);
     digitalWrite(pinB1B_, 0);
+    isAccelerateDecelerate_ = true;
     for (int i = fromSpeed; i >= toSpeed; i--) {
 
         // avoid the stop during decceleration
         if (stopAccelerateDecelerate_) {
+            isAccelerateDecelerate_ = false;
             this->stopMotor();
             stopAccelerateDecelerate_ = false;
             return 0;
@@ -264,10 +270,12 @@ uint8_t MotorDriverL9110::decelerateBackward(uint8_t fromSpeed, uint8_t toSpeed,
 
     digitalWrite(pinA1A_, 0);
     digitalWrite(pinB1A_, 0);
+    isAccelerateDecelerate_ = true;
     for (int i = fromSpeed; i >= toSpeed; i--) {
 
         // avoid the stop during decceleration
         if (stopAccelerateDecelerate_) {
+            isAccelerateDecelerate_ = false;
             this->stopMotor();
             stopAccelerateDecelerate_ = false;
             return 0;

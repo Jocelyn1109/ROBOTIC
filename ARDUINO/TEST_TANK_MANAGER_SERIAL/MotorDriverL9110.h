@@ -106,6 +106,12 @@ public:
      */
     uint8_t stopMotorAccelerationDeceleration();
 
+    /**
+     * Get the status of acceleration or deceleration
+     * @return true id accelerate/decelerate, otherwise false
+     */
+    bool isAccelerationDeceleration() const { return isAccelerateDecelerate_; }
+
 private:
 
     uint8_t pinA1A_;
@@ -113,6 +119,7 @@ private:
     uint8_t pinB1A_;
     uint8_t pinB1B_;
     bool stopAccelerateDecelerate_;
+    bool isAccelerateDecelerate_;
     Logger *logger_;
 
     /**

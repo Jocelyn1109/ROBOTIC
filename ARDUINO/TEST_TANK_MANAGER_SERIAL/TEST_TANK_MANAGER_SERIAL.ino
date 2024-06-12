@@ -10,6 +10,8 @@
 #include "FrameManager.h"
 #include "TankManager.h"
 
+#define SIG 9
+
 const uint8_t RX_PIN = 0;
 const uint8_t TX_PIN = 2;
 
@@ -32,6 +34,7 @@ void setup() {
   // Initialisation du terminal serie
   Serial.begin(19200);
 
+  pinMode(SIG, OUTPUT);
   pinMode(3, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(3), stopTank, RISING);
 
@@ -82,6 +85,8 @@ void loop() {
       manageArmDevice(frame);
     } else if (device == 'C') {
       manageCameraDevice(frame);
+    } else if (device == 'L') {
+      manageLightDevice(frame);
     } else {
       Serial.println(F("Unknown device"));
     }
@@ -178,6 +183,25 @@ void manageTankDevice(String frame) {
   }
 }
 
+
+/**
+  Manage light device
+*/
+void manageLightDevice(String frame) {
+  char function = frameManager.getFunction();
+  Serial.println(function);
+  if (function == 'O') {
+    char functionValue = frameManager.getFunctionValue();
+    if (functionValue == '1') {
+      Serial.println(F("Switch on light"));
+      switchOnLight();
+    } else if (functionValue == '0') {
+      Serial.println(F("Switch off light"));
+      switchOffLight();
+    }
+  }
+}
+
 /**
   Manage Arm device
 */
@@ -198,4 +222,18 @@ void manageCameraDevice(String frame) {
   // Green backlight color R:0, G:153, B:0
   lcd216Driver.setbacklightColor(0, 153, 0);
   lcd216Driver.writeMessage(frame);
+}
+
+/**
+  Switch off light
+ */
+void switchOffLight() {
+  analogWrite(SIG, 0);
+}
+
+/**
+  Switch on light
+ */
+void switchOnLight() {
+  analogWrite(SIG, 255);
 }

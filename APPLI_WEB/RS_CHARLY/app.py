@@ -11,6 +11,8 @@
 # pour le streaming dans une page html avec une caméra usb
     
 
+import serial
+
 from flask import Flask, render_template
 #from flask import Flask, render_template, Response
 from .services.tank_service import TankService
@@ -19,11 +21,10 @@ from .services.tank_service import TankService
 from .serialcom.serial_communication import SerialCommunication
 
 app = Flask(__name__)
-serialComm = SerialCommunication("/dev/ttyACM0", 19200, timeout=1)
+serialComm = None
 tankService = TankService()
-tankService.initService(serialComm, 2)
 # armService = ArmService()
-tankService.initService(serialComm, 3)
+#tankService.initService(serialComm, 3)
 # streamingGeneration = StreamingGeneration(0)
 
 #app.run(host='127.0.0.1', port=5000, debug=True)
@@ -38,6 +39,12 @@ def jquery_js():
 
 @app.route('/')
 def index():
+    try:
+        serialComm = SerialCommunication("/dev/ttyACM0", 19200, timeout=1)
+        tankService.initService(serialComm, 2)
+    except serial.SerialException:
+        print('/dev/ttyACM not found')
+
     return render_template('index.html')
 
 # Move the tank

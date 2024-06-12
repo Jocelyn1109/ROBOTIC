@@ -8,7 +8,7 @@ python -c "import flask; print(flask.__version__)"
 
 http://127.0.0.1:5000/
 
-export FLASK_APP=/home/wells/Dev/APPLI_WEB/RS_CHARLY
+export FLASK_APP=/home/wells/Dev/APPLI_WEB/RS_CHARLY/app.py
 (permet de dire à flask où trouver l'application)
 
 export FLASK_ENV=development
