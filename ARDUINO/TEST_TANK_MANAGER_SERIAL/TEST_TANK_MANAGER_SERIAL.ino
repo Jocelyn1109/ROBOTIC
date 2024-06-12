@@ -98,8 +98,11 @@ void loop() {
 */
 void stopTank() {
   Serial.println(F("interrupt: stop"));
-  //tankManager.stopAccelerationDeceleration();
-  tankManager.stopTank();
+  if (tankManager.accelerationDecelerationStatus()) {
+    tankManager.stopAccelerationDeceleration();
+  } else {
+    tankManager.stopTank();
+  }
 }
 
 /**
