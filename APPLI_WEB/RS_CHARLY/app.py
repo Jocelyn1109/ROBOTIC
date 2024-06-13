@@ -16,6 +16,7 @@ import serial
 from flask import Flask, render_template
 #from flask import Flask, render_template, Response
 from .services.tank_service import TankService
+from .services.light_service import LightService
 # from .services.arm_service import ArmService
 # from .camera.streaming_generation import StreamingGeneration
 from .serialcom.serial_communication import SerialCommunication
@@ -23,8 +24,8 @@ from .serialcom.serial_communication import SerialCommunication
 app = Flask(__name__)
 serialComm = None
 tankService = TankService()
+lightService = LightService()
 # armService = ArmService()
-#tankService.initService(serialComm, 3)
 # streamingGeneration = StreamingGeneration(0)
 
 #app.run(host='127.0.0.1', port=5000, debug=True)
@@ -42,6 +43,7 @@ def index():
     try:
         serialComm = SerialCommunication("/dev/ttyACM0", 19200, timeout=1)
         tankService.initService(serialComm, 2)
+        lightService.initService(serialComm)
     except serial.SerialException:
         print('/dev/ttyACM not found')
 
@@ -84,6 +86,21 @@ def move_tank(function):
     else:
         print("Unknown function") 
         return('', 403)
+
+# Switch on/off light
+# Return empty response
+@app.route('/on_off_light/<string:function>')
+def on_off_light(function):
+    if function == 'switch on':
+        lightService.switch_on()
+        return('', 204)
+    elif function == 'switch off':
+        lightService.switch_off()
+        return('', 204)
+    else:
+        print("Unknown function") 
+        return('', 403)
+
 
 #Move arm servo right
 @app.route('/arm_servo_right/<string:num_servo>')

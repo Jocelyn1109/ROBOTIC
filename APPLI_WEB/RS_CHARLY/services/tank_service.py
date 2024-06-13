@@ -18,7 +18,6 @@ class TankService(Service):
     
     # Init tank service
     def initService(self,serial, output_pin):
-        print('init tank service')
         self.outputPin = output_pin
         self.serial_ = serial
         GPIO.setmode(GPIO.BCM)
