@@ -17,7 +17,7 @@ class SerialCommunication():
     def __init__(self, serial_port, baudrate, timeout):
         self.serialComm = serial.Serial(port=serial_port, baudrate=baudrate, timeout=timeout)
         time.sleep(0.1) #wait for serial to open
-        self.logsFile = open("/home/wells/Dev/APPLI_WEB/RS_CHARLY/serialcom/logs/logs.txt", "w")
+        self.logsFile = open("/home/wells/Dev/ROBOTIC/APPLI_WEB/RS_CHARLY/serialcom/logs/logs.txt", "w")
         dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         self.logsFile.write(dt_string + ": opening serial port"+'\n')
         self.logsFile.close()
@@ -27,11 +27,11 @@ class SerialCommunication():
     def sendData(self,data):
         answer = ""
         if self.serialComm.isOpen():
-            self.logsFile = open("/home/wells/Dev/APPLI_WEB/RS_CHARLY/serialcom/logs/logs.txt","w")
+            self.logsFile = open("/home/wells/Dev/ROBOTIC/APPLI_WEB/RS_CHARLY/serialcom/logs/logs.txt","a")
             dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             self.logsFile.write(dt_string + ": sending data -> " + data + '\n')
-            print('data sent:')
-            print(data)
+            #print('data sent:')
+            #print(data)
             nbBytes = self.serialComm.write(data.encode())
             dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             self.logsFile.write(dt_string + ": write " + str(nbBytes) + " bytes"+'\n')

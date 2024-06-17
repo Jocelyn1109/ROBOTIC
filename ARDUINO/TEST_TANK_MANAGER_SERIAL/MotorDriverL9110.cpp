@@ -32,6 +32,7 @@ MotorDriverL9110::MotorDriverL9110(uint8_t pinA1A, uint8_t pinA1B, uint8_t pinB1
     pinB1B_ = pinB1B;
     logger_ = logger;
     initPin();
+    stopAccelerateDecelerate_ = false;
 }
 
 /**
@@ -72,6 +73,8 @@ uint8_t MotorDriverL9110::stopMotor() const {
     digitalWrite(pinA1B_, HIGH);
     digitalWrite(pinB1A_, HIGH);
     digitalWrite(pinB1B_, HIGH);
+
+    Serial.println(F("MotorDriverL9110::stopMotor()"));
 
     return 0;
 }
@@ -152,8 +155,8 @@ uint8_t MotorDriverL9110::accelerateForward(uint8_t fromSpeed, uint8_t toSpeed, 
         // avoid the stop during acceleration
         if (stopAccelerateDecelerate_) {
             isAccelerateDecelerate_ = false;
-            this->stopMotor();
             stopAccelerateDecelerate_ = false;
+            this->stopMotor();
             return 0;
         }
 
@@ -162,6 +165,7 @@ uint8_t MotorDriverL9110::accelerateForward(uint8_t fromSpeed, uint8_t toSpeed, 
         delay(accelerateSpeed);
     }
 
+    isAccelerateDecelerate_ = false;
     return 0;
 }
 
@@ -194,8 +198,8 @@ uint8_t MotorDriverL9110::accelerateBackward(uint8_t fromSpeed, uint8_t toSpeed,
         // avoid the stop during acceleration
         if (stopAccelerateDecelerate_) {
             isAccelerateDecelerate_ = false;
-            this->stopMotor();
             stopAccelerateDecelerate_ = false;
+            this->stopMotor();
             return 0;
         }
 
@@ -204,6 +208,7 @@ uint8_t MotorDriverL9110::accelerateBackward(uint8_t fromSpeed, uint8_t toSpeed,
         delay(accelerateSpeed);
     }
 
+    isAccelerateDecelerate_ = false;
     return 0;
 }
 
@@ -235,8 +240,8 @@ uint8_t MotorDriverL9110::decelerateForward(uint8_t fromSpeed, uint8_t toSpeed, 
         // avoid the stop during decceleration
         if (stopAccelerateDecelerate_) {
             isAccelerateDecelerate_ = false;
-            this->stopMotor();
             stopAccelerateDecelerate_ = false;
+            this->stopMotor();
             return 0;
         }
 
@@ -245,6 +250,7 @@ uint8_t MotorDriverL9110::decelerateForward(uint8_t fromSpeed, uint8_t toSpeed, 
         delay(decelerateSpeed);
     }
 
+    isAccelerateDecelerate_ = false;
     return 0;
 }
 
@@ -276,8 +282,8 @@ uint8_t MotorDriverL9110::decelerateBackward(uint8_t fromSpeed, uint8_t toSpeed,
         // avoid the stop during decceleration
         if (stopAccelerateDecelerate_) {
             isAccelerateDecelerate_ = false;
-            this->stopMotor();
             stopAccelerateDecelerate_ = false;
+            this->stopMotor();
             return 0;
         }
 
@@ -286,6 +292,7 @@ uint8_t MotorDriverL9110::decelerateBackward(uint8_t fromSpeed, uint8_t toSpeed,
         delay(decelerateSpeed);
     }
 
+    isAccelerateDecelerate_ = false;
     return 0;
 }
 
@@ -345,7 +352,8 @@ uint8_t MotorDriverL9110::stopMotorAccelerationDeceleration() {
             return 1;
         }
     }
-
+    
+    Serial.println(F("MotorDriverL9110::stopMotorAccelerationDeceleration()"));
     stopAccelerateDecelerate_ = true;
     return 0;
 }

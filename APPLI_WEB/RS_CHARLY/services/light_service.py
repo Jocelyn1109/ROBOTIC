@@ -28,5 +28,5 @@ class LightService:
     # Switch off light
     def switch_off(self):
         if isinstance(self.serial_, SerialCommunication):
-            answer = self.serial_.sendData("L : :O:0")
+            answer = self.serial_.sendData("L: :O:0")
             print(answer)

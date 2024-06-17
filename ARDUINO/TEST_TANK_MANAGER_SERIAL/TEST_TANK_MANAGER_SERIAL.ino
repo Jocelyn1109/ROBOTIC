@@ -10,7 +10,7 @@
 #include "FrameManager.h"
 #include "TankManager.h"
 
-#define SIG 9
+#define SIG 11
 
 const uint8_t RX_PIN = 0;
 const uint8_t TX_PIN = 2;
@@ -49,6 +49,8 @@ void setup() {
   pinMode(A1B, OUTPUT);
   pinMode(B1A, OUTPUT);
   pinMode(B1B, OUTPUT);
+
+  lcd216Driver.writeMessage("INIT OK!");
 }
 
 void loop() {
@@ -97,7 +99,6 @@ void loop() {
   Stop tank
 */
 void stopTank() {
-  Serial.println(F("interrupt: stop"));
   if (tankManager.accelerationDecelerationStatus()) {
     tankManager.stopAccelerationDeceleration();
   } else {
@@ -146,13 +147,13 @@ void manageTankDevice(String frame) {
     char functionValue = frameManager.getFunctionValue();
     if (functionValue == 'F') {
       Serial.println(F("Accelerate forward - speed 0 to 255"));
-      uint8_t resAccF = tankManager.accelerateForward(0, 255, 2);
+      uint8_t resAccF = tankManager.accelerateForward(0, 255, 8);
       if (resAccF != 0) {
         Serial.println(F("Erreur accelerate forward - speed 100 to 255"));
       }
     } else if (functionValue == 'B') {
       Serial.println(F("Accelerate backward - speed 0 to 255"));
-      uint8_t resAccB = tankManager.accelerateBackward(0, 255, 2);
+      uint8_t resAccB = tankManager.accelerateBackward(0, 255, 8);
       if (resAccB != 0) {
         Serial.println(F("Erreur accelerate backward - speed 0 to 255"));
       }
@@ -161,25 +162,25 @@ void manageTankDevice(String frame) {
     char functionValue = frameManager.getFunctionValue();
     if (functionValue == 'F') {
       Serial.println(F("Deccelerate forward - speed 255 to 0"));
-      uint8_t resDeccF = tankManager.decelerateForward(255, 0, 2);
+      uint8_t resDeccF = tankManager.decelerateForward(255, 100, 8);
       if (resDeccF != 0) {
-        Serial.println(F("Erreur deccelerate forward - speed 255 to 0"));
+        Serial.println(F("Erreur deccelerate forward - speed 255 to 100"));
       }
     } else if (functionValue == 'B') {
       Serial.println(F("Deccelerate backward - speed 0 to 255"));
-      uint8_t resDeccB = tankManager.decelerateBackward(255, 0, 2);
+      uint8_t resDeccB = tankManager.decelerateBackward(255, 100, 8);
       if (resDeccB != 0) {
-        Serial.println(F("Erreur deccelerate backward - speed 255 to 0"));
+        Serial.println(F("Erreur deccelerate backward - speed 255 to 100"));
       }
     }
   } else if (function == 'S') {
     char functionValue = frameManager.getFunctionValue();
     if (functionValue == '+') {
       Serial.println(F("Increase speed"));
-      speed = speed + 10;
+      speed = speed + 30;
     } else if (functionValue == '-') {
       Serial.println(F("Decrease speed"));
-      speed = speed - 10;
+      speed = speed - 30;
     }
   } else {
     Serial.println(F("Unknown function"));
@@ -191,6 +192,11 @@ void manageTankDevice(String frame) {
   Manage light device
 */
 void manageLightDevice(String frame) {
+  lcd216Driver.clearScreen();
+  lcd216Driver.setCursorPosition(1, 1);
+  // Blue backlight color R:0, G:102, B:0
+  lcd216Driver.setbacklightColor(0, 102, 204);
+  lcd216Driver.writeMessage(frame);
   char function = frameManager.getFunction();
   Serial.println(function);
   if (function == 'O') {

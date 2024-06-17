@@ -44,10 +44,12 @@ def index():
         serialComm = SerialCommunication("/dev/ttyACM0", 19200, timeout=1)
         tankService.initService(serialComm, 2)
         lightService.initService(serialComm)
+        print('Init OK !')
     except serial.SerialException:
         print('/dev/ttyACM not found')
 
-    return render_template('index.html')
+    #return render_template('index.html')
+    return render_template('index_new.html')
 
 # Move the tank
 # Return empty response

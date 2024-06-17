@@ -1,2 +1,1 @@
-22/01/2024 12:57:37: sending data -> T: :R: 
-22/01/2024 12:57:37: write 7 bytes
+15/06/2024 15:02:02: opening serial port
