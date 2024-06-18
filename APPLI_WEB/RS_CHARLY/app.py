@@ -27,6 +27,7 @@ tankService = TankService()
 lightService = LightService()
 # armService = ArmService()
 # streamingGeneration = StreamingGeneration(0)
+bauderate_19200 = int(serial.SerialBase().BAUDRATES[13])
 
 #app.run(host='127.0.0.1', port=5000, debug=True)
 
@@ -41,12 +42,15 @@ def jquery_js():
 @app.route('/')
 def index():
     try:
-        serialComm = SerialCommunication("/dev/ttyACM0", 19200, timeout=1)
+        #serialComm = SerialCommunication("/dev/ttyACM0", 19200, timeout=1)
+        serialComm = SerialCommunication("/dev/ttyACM0", bauderate_19200, timeout=1, write_timeout=1)
         tankService.initService(serialComm, 2)
         lightService.initService(serialComm)
         print('Init OK !')
     except serial.SerialException:
         print('/dev/ttyACM not found')
+    except serial.ValueError:
+            print('/dev/ttyACM parameter value error')
 
     #return render_template('index.html')
     return render_template('index_new.html')

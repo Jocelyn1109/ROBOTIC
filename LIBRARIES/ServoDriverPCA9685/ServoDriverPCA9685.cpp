@@ -16,6 +16,12 @@ ServoDriverPCA9685::ServoDriverPCA9685(const ServoDriverPCA9685 &other) {
 }
 
 /**
+ * Destructor
+ */
+virtual ServoDriverPCA9685::~ServoDriverPCA9685(){
+}
+
+/**
  * Initialize the driver.
  * Setups the I2C interface and hardware.
  * @return true if successful, otherwise false.
