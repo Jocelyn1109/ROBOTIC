@@ -5,11 +5,7 @@
  * Constructor
  * @param addr address of the PCA9685 on the I2C bus.
  */
-ServoDriverPCA9685::ServoDriverPCA9685(const uint8_t addr, float frequence, uint32_t oscillatorFrequency) : addr_(addr),
-                                                                                                            frequence_(
-                                                                                                                    frequence),
-                                                                                                            oscillatorFrequency_(
-                                                                                                                    oscillatorFrequency) {
+ServoDriverPCA9685::ServoDriverPCA9685(const uint8_t addr, float frequence, uint32_t oscillatorFrequency): addr_(addr), frequence_(frequence), oscillatorFrequency_(oscillatorFrequency) {
 }
 
 /**
@@ -69,7 +65,7 @@ void ServoDriverPCA9685::sleepWakeUp(bool isSleep) {
 void ServoDriverPCA9685::setDegreesWithPWM(uint8_t numServo, long degrees, long maxDegree, long servoMin,
                                            long servoMax, bool is4096) {
 
-    if (numServo > 15) {
+    if(numServo > 15){
         return;
     }
 
@@ -92,12 +88,11 @@ void ServoDriverPCA9685::setDegreesWithPWM(uint8_t numServo, long degrees, long 
  * @param servoMin the corresponding minimum pulse width in microseconds.
  * @param servoMax the corresponding maximum pulse width in microseconds.
  */
-void ServoDriverPCA9685::setDegreesWithMicroseconds(uint8_t numServo, long degrees, long maxDegree, long servoMin,
-                                                    long servoMax) {
+void ServoDriverPCA9685::setDegreesWithMicroseconds(uint8_t numServo, long degrees, long maxDegree, long servoMin, long servoMax) {
 
-    if (numServo <= 15) {
+    if(numServo <= 15){
         long pulseLen = map(degrees, 0, maxDegree, servoMin, servoMax);
-        pwmPCA9685.writeMicroseconds(numServo, pulseLen);
+        pwmPCA9685.writeMicroseconds(numServo,pulseLen);
     }
 }
 
@@ -128,8 +123,7 @@ float ServoDriverPCA9685::getCurrentDegreesWithPWM(uint8_t servoNum, long maxDeg
  * @param servoMax the corresponding maximum pulse width in microseconds.
  * @return the current degrees (position of the servo) otherwise -1;
  */
-float
-ServoDriverPCA9685::getCurrentDegreesWithMicroseconds(uint8_t servoNum, long maxDegree, long servoMin, long servoMax) {
+float ServoDriverPCA9685::getCurrentDegreesWithMicroseconds(uint8_t servoNum, long maxDegree, long servoMin, long servoMax) {
 
     if (servoNum <= 15) {
         uint16_t currentPWM = pwmPCA9685.getPWM(servoNum, true);
@@ -137,7 +131,7 @@ ServoDriverPCA9685::getCurrentDegreesWithMicroseconds(uint8_t servoNum, long max
         const uint16_t servoMax_4096 = convertePulseMicroSecondTo4096(servoMax);
         float currentDegrees = map(currentPWM, servoMin_4096, servoMax_4096, 0.0, maxDegree);
         return (float) currentDegrees;
-    } else {
+    }else{
         return -1;
     }
 }
