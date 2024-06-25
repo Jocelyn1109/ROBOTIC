@@ -18,8 +18,8 @@ const uint8_t SC_PIN = 4;
 uint8_t resInitLog = 0;
 bool start_test = true;
 
-Logger logger(String("drvL9110.txt"));
-MotorDriverL9110 motorDriverL9110(A1A, A1B, B1A, B1B, &logger);
+Logger logger{String("drvL9110.txt")};
+MotorDriverL9110 motorDriverL9110{A1A, A1B, B1A, B1B, &logger};
 
 void setup() {
 

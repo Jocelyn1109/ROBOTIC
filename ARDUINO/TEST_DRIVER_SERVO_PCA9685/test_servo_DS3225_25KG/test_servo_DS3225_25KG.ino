@@ -58,7 +58,7 @@ uint16_t SERVOMAX_DS3225 = 673;
 uint16_t PULSE_MIN = 500;
 uint16_t PULSE_MAX = 2500;
 
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+Adafruit_PWMServoDriver pwm{};
 const uint8_t servo_0 = 0;
 const uint8_t servo_1 = 1;
 

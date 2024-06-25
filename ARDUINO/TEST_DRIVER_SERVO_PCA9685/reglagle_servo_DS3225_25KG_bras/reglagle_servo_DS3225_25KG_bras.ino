@@ -36,7 +36,7 @@ void move_degrees();
 
 #include <Adafruit_PWMServoDriver.h>
 
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+Adafruit_PWMServoDriver pwm{};
 uint16_t SERVOMIN_DS3225 = 166;
 uint16_t SERVOMAX_DS3225 = 673;
 

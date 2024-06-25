@@ -20,10 +20,10 @@ const uint8_t B1A = 10;  // pin PWM
 const uint8_t B1B = 11;  // pin PWM
 const uint8_t SC_PIN = 4;
 
-Lcd216Driver lcd216Driver(RX_PIN, TX_PIN);
-FrameManager frameManager;
-Logger logger(String("drvL9110.txt"));
-MotorDriverL9110 motorDriverL9110(A1A, A1B, B1A, B1B, &logger);
+Lcd216Driver lcd216Driver{RX_PIN, TX_PIN};
+FrameManager frameManager{};
+Logger logger{String("drvL9110.txt")};
+MotorDriverL9110 motorDriverL9110{A1A, A1B, B1A, B1B, &logger};
 bool frameReceived = false;
 uint8_t resInitLog = 0;
 

@@ -6,7 +6,7 @@
 */
 
 #include <Servo.h>
-Servo servo_1;
+Servo servo_1{};
 uint8_t servo_1_pin = 9;
 bool start_test = true;
 

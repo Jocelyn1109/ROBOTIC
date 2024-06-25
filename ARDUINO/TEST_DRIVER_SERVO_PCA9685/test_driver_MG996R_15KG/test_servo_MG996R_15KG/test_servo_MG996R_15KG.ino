@@ -25,7 +25,7 @@ uint16_t SERVOMAX_MG996R = 673;  // La longueur d'impulsion 'maximale' (valeur d
 
 #define SERVO_FREQ 60  // mis-à-jour à 60 Hz pour MG996R.
 
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+Adafruit_PWMServoDriver pwm{};
 const uint8_t servo_0 = 0;
 bool initBreakout = false;
 bool start_test = false;

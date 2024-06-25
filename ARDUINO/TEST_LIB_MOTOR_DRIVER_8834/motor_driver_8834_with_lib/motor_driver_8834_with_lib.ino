@@ -14,8 +14,8 @@
 #include "MotorDriver8834.h"
 #include "Logger.h"
 
-Logger logger(String("drv8834.txt"));
-MotorDriver8834 motorDriver8834(&logger);
+Logger logger{String("drv8834.txt")};
+MotorDriver8834 motorDriver8834{&logger};
 
 const uint8_t DIR_PIN = 7;
 const uint8_t STEP_PIN = 8;

@@ -8,7 +8,7 @@
 
 #include <Adafruit_PWMServoDriver.h>
 
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+Adafruit_PWMServoDriver pwm{};
 
 // Suivant le type de servo utilisé, la largeur d'impulsion minimale et Maximale
 // peut changer. L'idéal est de sélectionner des valeurs aussi petites et aussi
@@ -17,6 +17,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 // Min et Max pour servo MG996R
 #define SERVOMIN 177          // La longueur d'impulsion 'minimale' (valeur du compteur, max 4096)
 #define SERVOMAX 673          // La longueur d'impulsion 'maximale' (valeur du compteur, max 4096)
+#define SERVO_FREQ 50
 
 uint8_t servo_1 = 1;
 
@@ -64,7 +65,7 @@ void loop() {
 
     //O°
     Serial.println(F("Servo 1 à 0 degré"));
-    int pulseLen = map(0, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    int pulseLen = map(0, 0, 270, SERVOMIN, SERVOMAX);
     String pulse_0 = F("Pulse pour 0 degré: ");
     pulse_0.concat(pulseLen);
     Serial.println(pulse_0);
@@ -75,7 +76,7 @@ void loop() {
 
     //Neutre (180°)
     Serial.println(F("Servo 1 à 135 degré"));
-    pulseLen = map(135, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    pulseLen = map(135, 0, 270, SERVOMIN, SERVOMAX);
     String pulse_135 = F("Pulse pour 135 degré: ");
     pulse_135.concat(pulseLen);
     Serial.println(pulse_135);
@@ -86,7 +87,7 @@ void loop() {
 
     // 270°
     Serial.println(F("Servo 1 à 270 degré"));
-    pulseLen = map(270, 0, 270, SERVOMIN_DS3225, SERVOMAX_DS3225);
+    pulseLen = map(270, 0, 270, SERVOMIN, SERVOMAX);
     String pulse_270 = F("Pulse pour 270 degré: ");
     pulse_270.concat(pulseLen);
     Serial.println(pulse_270);

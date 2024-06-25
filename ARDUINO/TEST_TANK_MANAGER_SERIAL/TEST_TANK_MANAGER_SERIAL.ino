@@ -22,8 +22,8 @@ const uint8_t B1B = 10;  // pin PWM
 
 bool start_test = true;
 
-TankManager tankManager = TankManager(nullptr, A1A, A1B, B1A, B1B);
-Lcd216Driver lcd216Driver(RX_PIN, TX_PIN);
+TankManager tankManager{nullptr, A1A, A1B, B1A, B1B};
+Lcd216Driver lcd216Driver{RX_PIN, TX_PIN};
 FrameManager frameManager;
 bool frameReceived = false;
 

@@ -35,7 +35,7 @@ uint8_t num_servo = 0;
 int interval = 3;
 float frequence = 60.0;
 
-ServoDriverPCA9685 servoDriverPCA9685(0x40, frequence, 27000000);
+ServoDriverPCA9685 servoDriverPCA9685{0x40, frequence, 27000000};
 bool initBreakout = false;
 
 void setup() {

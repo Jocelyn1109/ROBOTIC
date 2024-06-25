@@ -12,8 +12,8 @@
 const uint8_t RX_PIN = 0;
 const uint8_t TX_PIN = 2;
 
-Lcd216Driver lcd216Driver(RX_PIN, TX_PIN);
-FrameManager frameManager;
+Lcd216Driver lcd216Driver{RX_PIN, TX_PIN};
+FrameManager frameManager{};
 bool frameReceived = false;
 
 void setup() {

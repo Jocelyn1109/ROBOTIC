@@ -23,9 +23,9 @@ const uint8_t TX_PIN = 2;
 uint8_t resInitLog = 0;
 bool start_test = true;
 
-Logger logger(String("drvL9110.txt"));
-MotorDriverL9110 motorDriverL9110(A1A, A1B, B1A, B1B, &logger);
-Lcd216Driver lcd216Driver(RX_PIN, TX_PIN);
+Logger logger{String("drvL9110.txt")};
+MotorDriverL9110 motorDriverL9110{A1A, A1B, B1A, B1B, &logger};
+Lcd216Driver lcd216Driver{RX_PIN, TX_PIN};
 
 void setup() {
 

@@ -5,7 +5,7 @@
 
 #include "FrameManager.h"
 
-FrameManager frameManager = FrameManager();
+FrameManager frameManager{};
 unsigned long startTime;
 unsigned long endTime;
 char device;

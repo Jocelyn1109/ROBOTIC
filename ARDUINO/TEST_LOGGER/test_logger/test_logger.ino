@@ -8,7 +8,7 @@
 #include "Logger.h"
 
 const uint8_t SC_PIN = 2;
-Logger logger(String("log_1.txt"));
+Logger logger{String("log_1.txt")};
 uint8_t resInit = 0;
 bool start_test = true;
 bool is_remove_file = false;

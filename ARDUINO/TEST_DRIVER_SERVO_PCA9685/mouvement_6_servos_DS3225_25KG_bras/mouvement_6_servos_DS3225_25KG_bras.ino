@@ -44,7 +44,7 @@
 
 long SERVOMIN_DS3225 = 166.0;
 long SERVOMAX_DS3225 = 673.0;
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+Adafruit_PWMServoDriver pwm{};
 
 float freq = 60;
 bool initBreakout = false;

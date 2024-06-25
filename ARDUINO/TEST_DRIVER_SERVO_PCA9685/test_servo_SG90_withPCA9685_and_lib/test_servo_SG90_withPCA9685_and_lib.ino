@@ -17,7 +17,7 @@ long SERVOMAX_SG90 = 673.0;
 float frequence = 60.0;
 bool start_test = false;
 uint8_t num_servo = 0;
-ServoDriverPCA9685 servoDriverPCA9685(0x40, frequence, 27000000);
+ServoDriverPCA9685 servoDriverPCA9685{0x40, frequence, 27000000};
 bool initBreakout = false;
 float curentServosDegrees[2] = {};
 float degrees_ = 0.0;
